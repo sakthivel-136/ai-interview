@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+supabase
+python-dotenv
+pydantic
+pydantic-settings
+httpx
+pytest
+openai>=1.0.0
+google-generativeai
