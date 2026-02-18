@@ -51,7 +51,7 @@ def get_gemini_response(prompt: str, json_mode: bool = True, model_override: Opt
     return get_mistral_response(prompt, json_mode, model_override)
 
 def evaluate_hr_answer(question: str, answer: str):
-    prompt = f\"\"\"
+    prompt = f"""
     You are an expert HR interviewer. Evaluate this answer RIGOROUSLY.
     
     Question: "{question}"
@@ -67,7 +67,7 @@ def evaluate_hr_answer(question: str, answer: str):
     - "sentiment": string ("Positive", "Neutral", "Negative")
     - "confidence": float (0.0 to 1.0)
     - "feedback": string (Critique the answer directly. If generic, say so.)
-    \"\"\"
+    """
 
     content = get_mistral_response(prompt)
     if content:
@@ -85,7 +85,7 @@ def evaluate_hr_answer(question: str, answer: str):
     }
 
 def evaluate_technical_answer(question: str, answer: str):
-    prompt = f\"\"\"
+    prompt = f"""
     You are a Senior Technical Interviewer. Evaluate this answer for ACCURACY, DEPTH, and SPECIFICITY.
     
     Question: "{question}"
@@ -100,7 +100,7 @@ def evaluate_technical_answer(question: str, answer: str):
     - "score": integer (0-100). Be strict. 70+ is passing.
     - "feedback": string (Detailed correction or praise)
     - "key_concepts": list of strings (Key concepts mentioned or missed)
-    \"\"\"
+    """
 
     content = get_mistral_response(prompt)
     if content:
