@@ -38,11 +38,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 // Case A: Fresh Tab Open
                 // Even if Supabase has a token in localStorage, we must kill it
                 // because usage specs say "close tab = logout".
+
+                // Force full cleanup to prevent any "Enter Dashboard" buttons from showing
+                console.log("🔒 Security: Fresh tab detected. Wiping session.")
+
+                // 1. Tell Supabase to sign out
                 await supabase.auth.signOut()
-                // Now we are sure user is logged out
+
+                // 2. NUCLEAR OPTION: Clear localStorage manually to be 100% sure
+                // This guarantees getSession() returns null in the next step
+                if (typeof window !== 'undefined') {
+                    window.localStorage.clear()
+                }
             }
 
             // Case B: Page Refresh (isAlive exists) -> Keep session
+            // Or we just finished ensuring logout.
 
             // Mark validation as done
             setIsTabVerified(true)
@@ -84,6 +95,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const signOut = async () => {
         sessionStorage.removeItem(TAB_KEY)
         await supabase.auth.signOut()
+        if (typeof window !== 'undefined') {
+            window.localStorage.clear()
+        }
         setUser(null)
         setSession(null)
         router.push('/login')
