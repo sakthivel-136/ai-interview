@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
@@ -22,6 +22,26 @@ interface Profile {
     }
 }
 
+// ── NEW: Component that handles search params safely inside Suspense ──
+function SessionExitAlert() {
+    const searchParams = useSearchParams()
+    const exitError = searchParams.get('error') === 'mock_exit'
+
+    if (!exitError) return null
+
+    return (
+        <div className="bg-rose-50 border border-rose-100 p-6 rounded-3xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4">
+            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-rose-600 shadow-sm shadow-rose-900/10">
+                <AlertCircle className="w-6 h-6" />
+            </div>
+            <div>
+                <h3 className="text-sm font-black text-rose-900 uppercase tracking-tight">Session Cancelled</h3>
+                <p className="text-rose-600 font-bold uppercase text-[9px] tracking-widest mt-0.5">Full-screen exit detected. Attempt logged and terminated.</p>
+            </div>
+        </div>
+    )
+}
+
 export default function DashboardClient() {
     const { user, isLoading: authLoading } = useAuth()
     const [profile, setProfile] = useState<Profile | null>(null)
@@ -29,8 +49,7 @@ export default function DashboardClient() {
     const [recentActivity, setRecentActivity] = useState<any[]>([])
     const [stats, setStats] = useState({ interviews: 0, streak: 0 })
     const router = useRouter()
-    const searchParams = useSearchParams()
-    const exitError = searchParams.get('error') === 'mock_exit'
+    // REMOVED useSearchParams from here! It's now in SessionExitAlert
     const supabase = createClient()
 
     useEffect(() => {
@@ -110,17 +129,11 @@ export default function DashboardClient() {
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900 p-6 pt-24">
             <div className="max-w-7xl mx-auto space-y-8">
-                {exitError && (
-                    <div className="bg-rose-50 border border-rose-100 p-6 rounded-3xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4">
-                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-rose-600 shadow-sm shadow-rose-900/10">
-                            <AlertCircle className="w-6 h-6" />
-                        </div>
-                        <div>
-                            <h3 className="text-sm font-black text-rose-900 uppercase tracking-tight">Session Cancelled</h3>
-                            <p className="text-rose-600 font-bold uppercase text-[9px] tracking-widest mt-0.5">Full-screen exit detected. Attempt logged and terminated.</p>
-                        </div>
-                    </div>
-                )}
+                {/* Wrap the component using useSearchParams in Suspense */}
+                <Suspense fallback={null}>
+                    <SessionExitAlert />
+                </Suspense>
+
                 <header className="flex justify-between items-center bg-white p-10 rounded-[2.5rem] shadow-2xl shadow-blue-900/5 border border-slate-100">
                     <div>
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 mb-3">
