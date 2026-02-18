@@ -47,8 +47,8 @@ export async function updateSession(request: NextRequest) {
 
     // 2. Auth routes: redirect to dashboard if ALREADY authenticated
     // This prevents "I am on login page but I am actually logged in" confusion.
-    const authPaths = ['/login', '/register', '/']
-    // Note: Landing page '/' is included here so logged-in users go straight to dashboard
+    // NOTE: We do NOT include '/' here anymore, so logged-in users CAN visit the landing page.
+    const authPaths = ['/login', '/register']
     if (authPaths.includes(pathname) && user) {
         const url = request.nextUrl.clone()
         url.pathname = '/dashboard'
