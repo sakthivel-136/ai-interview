@@ -116,12 +116,10 @@ export const useFullScreen = () => {
 
         document.addEventListener('fullscreenchange', handleFullScreenChange)
         document.addEventListener('visibilitychange', handleVisibilityChange)
-        window.addEventListener('blur', handleBlur)
 
         return () => {
             document.removeEventListener('fullscreenchange', handleFullScreenChange)
             document.removeEventListener('visibilitychange', handleVisibilityChange)
-            window.removeEventListener('blur', handleBlur)
         }
     }, [checkBlockStatus, reportExit, sessionStarted])
 

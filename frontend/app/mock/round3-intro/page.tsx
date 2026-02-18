@@ -19,13 +19,13 @@ export default function Round3IntroPage() {
 
             const { data } = await supabase
                 .from('mock_attempts')
-                .select('*')
+                .select('id')
                 .eq('user_id', session.user.id)
                 .eq('round', 'Coding')
                 .eq('passed', true)
-                .maybeSingle()
+                .limit(1)
 
-            if (data) {
+            if (data && data.length > 0) {
                 setPassedRound2(true)
             }
             setLoading(false)
@@ -48,7 +48,7 @@ export default function Round3IntroPage() {
                 </div>
                 <h1 className="text-4xl font-black text-slate-900 mb-4 tracking-tight">Phase Restricted</h1>
                 <p className="text-slate-500 max-w-md mb-10 font-medium leading-relaxed">
-                    Completion of the <span className="font-bold text-slate-800">Technical Assessment</span> with a minimum <span className="text-[#003399] font-bold">70% score</span> is required to proceed.
+                    Completion of the <span className="font-bold text-slate-800">Coding Assessment</span> with a minimum <span className="text-[#003399] font-bold">70% score</span> is required to proceed.
                 </p>
                 <button
                     onClick={() => router.push('/dashboard')}
