@@ -19,13 +19,13 @@ export default function Round4IntroPage() {
 
             const { data } = await supabase
                 .from('mock_attempts')
-                .select('*')
+                .select('id')
                 .eq('user_id', session.user.id)
                 .eq('round', 'HR')
                 .eq('passed', true)
-                .maybeSingle()
+                .limit(1)
 
-            if (data) {
+            if (data && data.length > 0) {
                 setPassedRound3(true)
             }
             setLoading(false)

@@ -44,6 +44,7 @@ export default function ProblemDetailPage() {
     const [hasPassed, setHasPassed] = useState(false)
     const supabase = createClient()
     const [timeLeft, setTimeLeft] = useState(1800) // 30 minutes
+    const [supabaseProblemId, setSupabaseProblemId] = useState<string | null>(null)
 
     useEffect(() => {
         const fetchProblemStatus = async () => {
@@ -60,6 +61,8 @@ export default function ProblemDetailPage() {
                         .maybeSingle();
 
                     if (problemRow?.id) {
+                        setSupabaseProblemId(problemRow.id)
+
                         // Step 2: Check if user has a passing submission for this UUID
                         const { data: passData } = await supabase
                             .from('submissions')
@@ -114,7 +117,7 @@ export default function ProblemDetailPage() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session.access_token}`
                 },
-                body: JSON.stringify({ problem_id: id, code })
+                body: JSON.stringify({ problem_id: supabaseProblemId || id, code })
             })
 
             const data = await response.json()

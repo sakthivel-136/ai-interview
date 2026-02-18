@@ -31,13 +31,11 @@ export async function updateSession(request: NextRequest) {
     )
 
     // Refresh the session cookie if it exists
-    await supabase.auth.getUser()
-
     const { data: { user } } = await supabase.auth.getUser()
 
     const pathname = request.nextUrl.pathname
 
-    // ── Protected routes: redirect to login if not authenticated ──
+    // 1. Protected routes: redirect to login if not authenticated
     const protectedPaths = ['/dashboard', '/practice', '/mock', '/leaderboard', '/profile-setup']
     const isProtectedRoute = protectedPaths.some(path => pathname.startsWith(path))
 
@@ -47,10 +45,15 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(url)
     }
 
-    // NOTE: We do NOT redirect logged-in users away from '/', '/login', '/register'
-    // at the middleware level. The client-side AuthContext handles sign-out on fresh
-    // tab open, and the login page handles redirect to /dashboard after login.
-    // Doing it here causes a race condition with the client-side sign-out.
+    // 2. Auth routes: redirect to dashboard if ALREADY authenticated
+    // This prevents "I am on login page but I am actually logged in" confusion.
+    // NOTE: We do NOT include '/' here anymore, so logged-in users CAN visit the landing page.
+    const authPaths = ['/login', '/register']
+    if (authPaths.includes(pathname) && user) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/dashboard'
+        return NextResponse.redirect(url)
+    }
 
     return response
 }

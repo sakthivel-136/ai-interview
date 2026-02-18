@@ -195,8 +195,31 @@ def get_resume_based_technical_questions(user = Depends(get_current_user)):
         return {"questions": fallback, "source": "fallback"}
 
     resume_text = resume_data.data[0]["resume_text"]
-    questions = generate_resume_technical_questions(resume_text)
-    return {"questions": questions, "source": "resume"}
+    resume_questions_list = generate_resume_technical_questions(resume_text)
+    
+    # Mix: 3 from Resume + 2 from Static Fallback
+    final_questions = resume_questions_list[:3]
+    
+    # Static Fallback Pool
+    fallback_pool = [
+        "Explain the critical differences between a process and a thread.",
+        "Deep dive into Hash Map implementation and collision resolution.",
+        "Architectural principles of REST vs gRPC.",
+        "Big O analysis: Compare sorting algorithms in average and worst case.",
+        "Consistency vs Availability in distributed NoSQL databases.",
+        "Memory management and garbage collection strategies in Python/Java.",
+        "Functional programming: Explain closures and decorators with use cases.",
+        "Distributed Locking: How would you implement it in a microservices architecture?",
+        "Database Indexing: Explain B-Trees vs Hash Indexes.",
+        "Solid Principles: Explain with a real-world refactoring example."
+    ]
+    
+    if len(final_questions) < 5:
+        needed = 5 - len(final_questions)
+        random.shuffle(fallback_pool)
+        final_questions.extend(fallback_pool[:needed])
+        
+    return {"questions": final_questions, "source": "mixed"}
 
 @router.post("/technical/submit")
 def submit_technical_answer(submission: HRSubmitSchema, user = Depends(get_current_user)):

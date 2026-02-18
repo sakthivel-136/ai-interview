@@ -1,27 +1,57 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { ChevronRight, Shield, Zap, BarChart3, Globe, Award } from 'lucide-react'
+import { useAuth } from '@/context/AuthContext'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
+  const { user, isLoading } = useAuth()
+  const [mounted, setMounted] = useState(false)
+
+  // Avoid hydration mismatch by waiting for mount
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans">
-      {/* Navbar */}
+      {/* Navbar - Custom for Landing Page */}
       <nav className="absolute top-0 left-0 w-full z-50 bg-[#000066] border-b border-white/10 h-20 flex items-center shadow-2xl">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-black text-white tracking-tighter uppercase">
+            <div className="flex items-center gap-3">
+              <div className="relative w-8 h-8">
+                <Image
+                  src="/logo.png"
+                  alt="VANTAGE"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <span className="text-2xl font-black text-white tracking-tighter uppercase sm:block hidden">
                 VANTAGE
               </span>
             </div>
+
+            {/* Auth Actions */}
             <div className="flex items-center gap-6">
-              <Link href="/login" className="text-white/80 hover:text-white text-xs font-black uppercase tracking-widest transition-colors">
-                Authorized Access
-              </Link>
-              <Link href="/register" className="bg-white text-[#000066] px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all hover:bg-blue-50 shadow-xl shadow-black/20">
-                Register
-              </Link>
+              {mounted && !isLoading && user ? (
+                <Link href="/dashboard" className="bg-white text-[#000066] px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all hover:bg-blue-50 shadow-xl shadow-black/20 flex items-center gap-2">
+                  Enter Dashboard <ChevronRight className="w-3 h-3" />
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login" className="text-white/80 hover:text-white text-xs font-black uppercase tracking-widest transition-colors">
+                    Authorized Access
+                  </Link>
+                  <Link href="/register" className="bg-white text-[#000066] px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all hover:bg-blue-50 shadow-xl shadow-black/20">
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -44,13 +74,13 @@ export default function Home() {
           </h1>
 
           <p className="max-w-2xl mx-auto text-xl text-slate-500 mb-12 font-bold uppercase tracking-tight leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000">
-            The world's most advanced AI-driven interview intelligence platform. Built for elite candidates.
+            The world's most advanced neural interview intelligence platform. Built for elite candidates.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-in fade-in slide-in-from-bottom-12 duration-1000">
-            <Link href="/register">
+            <Link href={user ? "/dashboard" : "/register"}>
               <button className="px-10 py-5 bg-[#000066] text-white rounded-full font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-900 transition-all shadow-2xl shadow-blue-900/20 flex items-center gap-3 group">
-                Initialize Practice
+                {user ? "Resume Session" : "Initialize Practice"}
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
@@ -82,7 +112,7 @@ export default function Home() {
             />
             <FeatureCard
               title="Neural Mocking"
-              desc="Advanced behavioral analysis powered by Gemini 2.0 architecture."
+              desc="Advanced behavioral analysis powered by proprietary neural architecture."
               icon={<Globe className="w-8 h-8" />}
             />
             <FeatureCard
