@@ -65,10 +65,17 @@ export default function DashboardClient() {
             const { data: statsData } = await supabase.from('user_stats').select('*').eq('user_id', user.id).single()
 
             if (profileData) {
+                if (!profileData.full_name) {
+                    router.push('/profile-setup')
+                    return
+                }
                 setProfile({
                     ...profileData,
                     stats: statsData || { total_score: 0, rank: 0, aptitude_score: 0, coding_score: 0, hr_score: 0, technical_score: 0 }
                 })
+            } else {
+                router.push('/profile-setup')
+                return
             }
 
             // 2. Fetch Interview Count
