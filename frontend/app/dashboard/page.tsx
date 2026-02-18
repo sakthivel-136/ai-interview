@@ -1,5 +1,9 @@
 'use client'
 
+// Force dynamic rendering to bypass static generation checks for useSearchParams.
+// This page is protected and user-specific anyway, so it should never be static.
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -25,7 +29,7 @@ interface Profile {
     }
 }
 
-// ── Inner component that uses useSearchParams (must be inside Suspense) ───────
+// ── Inner component that uses useSearchParams ───────
 function DashboardContent() {
     const { user, isLoading: authLoading } = useAuth()
     const [profile, setProfile] = useState<Profile | null>(null)
