@@ -13,10 +13,12 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
     SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", "")
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    GEMINI_API_KEYS: str = os.getenv("GEMINI_API_KEYS", "") # Comma separated keys
+    GEMINI_API_KEYS: str = os.getenv("GEMINI_API_KEYS", "")
     MISTRAL_API_KEY: str = os.getenv("MISTRAL_API_KEY", "")
     MISTRAL_MODEL: str = os.getenv("MISTRAL_MODEL", "mistral-small-latest")
-    
+    # Frontend URL for CORS — set to your Vercel URL in production
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 @lru_cache()
