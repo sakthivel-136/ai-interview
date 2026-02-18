@@ -8,412 +8,104 @@ export interface AptitudeQuestion {
 }
 
 export const aptitudeQuestions: AptitudeQuestion[] = [
-    {
-        id: "apt-1",
-        question: "A train running at the speed of 60 km/hr crosses a pole in 9 seconds. What is the length of the train?",
-        options: ["120 metres", "180 metres", "324 metres", "150 metres"],
-        answer: "150 metres",
-        explanation: "Speed = 60 * (5/18) m/sec = 50/3 m/sec. Length = Speed * Time = (50/3) * 9 = 150 metres.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-2",
-        question: "The average of 20 numbers is zero. Of them, at the most, how many may be greater than zero?",
-        options: ["0", "1", "10", "19"],
-        answer: "19",
-        explanation: "Average of 20 numbers is 0, so their sum is 0. If 19 numbers are positive, say x each, the 20th number can be -19x to make the sum zero.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-3",
-        question: "A sum of money at compound interest amounts to thrice itself in 3 years. In how many years will it be 9 times itself?",
-        options: ["9 years", "6 years", "12 years", "15 years"],
-        answer: "6 years",
-        explanation: "If P becomes 3P in 3 years, then (1+r/100)^3 = 3. For P to become 9P, (1+r/100)^n = 9 = 3^2. Hence n = 3*2 = 6 years.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-4",
-        question: "Find the odd one out: 3, 5, 11, 14, 17, 21",
-        options: ["21", "17", "14", "3"],
-        answer: "14",
-        explanation: "All except 14 are odd numbers. (Alternatively, all except 14 and 21 are prime, but 14 is the only even one).",
-        category: "Logical"
-    },
-    {
-        id: "apt-5",
-        question: "Looking at a portrait of a man, Harsh said, 'His mother is the wife of my father's son. Brothers and sisters I have none.' At whose portrait was Harsh looking?",
-        options: ["His son", "His cousin", "His uncle", "His nephew"],
-        answer: "His son",
-        explanation: "Since Harsh has no brothers/sisters, 'father's son' is Harsh himself. The man's mother is Harsh's wife, so the man is Harsh's son.",
-        category: "Logical"
-    },
-    {
-        id: "apt-6",
-        question: "A, B and C can do a piece of work in 20, 30 and 60 days respectively. In how many days can A do the work if he is assisted by B and C on every third day?",
-        options: ["12 days", "15 days", "16 days", "18 days"],
-        answer: "15 days",
-        explanation: "A's 2 days work = 2/20 = 1/10. (A+B+C)'s 1 day work = 1/20+1/30+1/60 = 6/60 = 1/10. 3 days work = 1/10 + 1/10 = 1/5. Total 15 days for full work.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-7",
-        question: "Synonym of 'ABANDON'?",
-        options: ["Forsake", "Keep", "Cherish", "Hold"],
-        answer: "Forsake",
-        explanation: "Abandon means to leave completely and finally; forsake is a direct synonym.",
-        category: "Verbal"
-    },
-    {
-        id: "apt-8",
-        question: "Antonym of 'ENORMOUS'?",
-        options: ["Soft", "Tiny", "Average", "Weak"],
-        answer: "Tiny",
-        explanation: "Enormous means huge; tiny means very small.",
-        category: "Verbal"
-    },
-    {
-        id: "apt-9",
-        question: "A shopkeeper expected a 25% profit on the selling price. What is his actual profit percentage?",
-        options: ["20%", "25%", "33.33%", "30%"],
-        answer: "33.33%",
-        explanation: "Let SP = 100. Profit = 25. CP = 100-25 = 75. Actual profit % = (25/75)*100 = 33.33%.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-10",
-        question: "Pointing to a photograph, a lady tells Pramod, 'I am the only daughter of this lady and her son is your maternal uncle.' How is the speaker related to Pramod's father?",
-        options: ["Sister-in-law", "Wife", "Mother", "Aunt"],
-        answer: "Wife",
-        explanation: "The lady in the photo's son is Pramod's maternal uncle, so the lady in the photo is Pramod's grandmother. The speaker is the only daughter, making her Pramod's mother and his father's wife.",
-        category: "Logical"
-    },
-    {
-        id: "apt-11",
-        question: "How many times are the hands of a clock at right angle in a day?",
-        options: ["22", "24", "44", "48"],
-        answer: "44",
-        explanation: "The hands are at right angles twice an hour, but only 22 times in 12 hours due to overlap at 3 and 9 o'clock. 22*2 = 44 in 24 hours.",
-        category: "Logical"
-    },
-    {
-        id: "apt-12",
-        question: "Find the missing number in the sequence: 4, 9, 20, 43, 90, ?",
-        options: ["185", "180", "175", "190"],
-        answer: "185",
-        explanation: "4*2+1=9, 9*2+2=20, 20*2+3=43, 43*2+4=90, 90*2+5=185.",
-        category: "Logical"
-    },
-    {
-        id: "apt-13",
-        question: "A person crosses a 600 m long street in 5 minutes. What is his speed in km per hour?",
-        options: ["3.6", "7.2", "8.4", "10"],
-        answer: "7.2",
-        explanation: "Speed = 600 / (5*60) = 2 m/sec. In km/hr = 2 * (18/5) = 36/5 = 7.2 km/hr.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-14",
-        question: "If 1st January 2001 was a Monday, what day was 1st January 2005?",
-        options: ["Friday", "Saturday", "Sunday", "Monday"],
-        answer: "Saturday",
-        explanation: "2001 to 2005: 4 years. 2004 was a leap year. Odd days = 3 (non-leap) + 2 (leap) = 5. Monday + 5 = Saturday.",
-        category: "Logical"
-    },
-    {
-        id: "apt-15",
-        question: "Two numbers are in the ratio 3:5. If 9 is subtracted from each, the new numbers are in the ratio 12:23. The smaller number is:",
-        options: ["27", "33", "49", "55"],
-        answer: "33",
-        explanation: "Let numbers be 3x, 5x. (3x-9)/(5x-9) = 12/23. 69x-207 = 60x-108. 9x = 99. x = 11. Smaller number = 3*11 = 33.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-16",
-        question: "If FRIEND is coded as HUMJTK, how is CANDLE coded?",
-        options: ["EDRIRL", "DCQHQK", "ESJFME", "FYOBOC"],
-        answer: "EDRIRL",
-        explanation: "F+2=H, R+3=U, I+4=M, E+5=J, N+6=T, D+7=K. C+2=E, A+3=D, N+4=R, D+5=I, L+6=R, E+7=L.",
-        category: "Logical"
-    },
-    {
-        id: "apt-17",
-        question: "Select the correctly spelled word.",
-        options: ["Accomodate", "Accommodate", "Acomodate", "Acommodate"],
-        answer: "Accommodate",
-        explanation: "The correct spelling is 'Accommodate' with double 'c' and double 'm'.",
-        category: "Verbal"
-    },
-    {
-        id: "apt-18",
-        question: "A sum of money at simple interest amounts to Rs. 815 in 3 years and to Rs. 854 in 4 years. The sum is:",
-        options: ["Rs. 650", "Rs. 690", "Rs. 698", "Rs. 700"],
-        answer: "Rs. 698",
-        explanation: "Interest for 1 year = 854 - 815 = 39. Interest for 3 years = 39 * 3 = 117. Principal = 815 - 117 = 698.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-19",
-        question: "Which one of the following is not a prime number?",
-        options: ["31", "61", "71", "91"],
-        answer: "91",
-        explanation: "91 = 7 * 13. Others are prime numbers.",
-        category: "Logical"
-    },
-    {
-        id: "apt-20",
-        question: "Three times the first of three consecutive odd integers is 3 more than twice the third. Find the third integer.",
-        options: ["11", "13", "15", "17"],
-        answer: "15",
-        explanation: "Let integers be x, x+2, x+4. 3x = 2(x+4) + 3. 3x = 2x + 8 + 3. x = 11. Third integer = 11+4 = 15.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-21",
-        question: "A fruit seller had some apples. He sells 40% apples and still has 420 apples. Originally, he had:",
-        options: ["588 apples", "600 apples", "672 apples", "700 apples"],
-        answer: "700 apples",
-        explanation: "60% of original = 420. Original = (420 * 100) / 60 = 700.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-22",
-        question: "What is the next number in the series? 121, 144, 169, 196, ?",
-        options: ["225", "256", "289", "324"],
-        answer: "225",
-        explanation: "Squares of 11, 12, 13, 14. Next is 15^2 = 225.",
-        category: "Logical"
-    },
-    {
-        id: "apt-23",
-        question: "Choose a word that can substitute: 'A place where bees are kept'",
-        options: ["Aviary", "Apiary", "Aquarium", "Orchard"],
-        answer: "Apiary",
-        explanation: "An apiary is where bees are kept; aviary is for birds.",
-        category: "Verbal"
-    },
-    {
-        id: "apt-24",
-        question: "If 'water' is called 'food', 'food' is called 'tree', 'tree' is called 'sky', 'sky' is called 'wall', on which of the following does a fruit grow?",
-        options: ["Water", "Food", "Tree", "Sky"],
-        answer: "Sky",
-        explanation: "Fruits grow on 'tree', and 'tree' is called 'sky'.",
-        category: "Logical"
-    },
-    {
-        id: "apt-25",
-        question: "The ratio of the ages of A and B is 4:3. After 6 years, their ages will be in the ratio 11:9. B's present age is:",
-        options: ["9 years", "12 years", "18 years", "21 years"],
-        answer: "12 years",
-        explanation: "Let ages be 4x, 3x. (4x+6)/(3x+6) = 11/9. 36x+54 = 33x+66. 3x = 12. B's age = 3x = 12 years.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-26",
-        question: "Which number is divisible by 11?",
-        options: ["48232", "54274", "46911", "97114"],
-        answer: "48232",
-        explanation: "Sum of digits at odd places - Sum of digits at even places = (4+2+2)-(8+3) = 8-11 = -3. Wait. (4+2+2)-(8+3)=8-11=-3. Let's try 46911: (4+9+1)-(6+1)=14-7=7. Let's try 97114: (9+1+4)-(7+1)=14-8=6. One more check... 48323? No. 41822? (4+8+2)-(1+2) = 14-3=11. Yes, 41822 is divisible by 11. Let's fix option A.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-27",
-        question: "Two pipes A and B can fill a tank in 20 and 30 minutes respectively. If both pipes are opened together, the time taken to fill the tank is:",
-        options: ["10 minutes", "12 minutes", "15 minutes", "25 minutes"],
-        answer: "12 minutes",
-        explanation: "1/Time = 1/20 + 1/30 = (3+2)/60 = 5/60 = 1/12. Time = 12 minutes.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-28",
-        question: "Find the missing number: 2, 6, 12, 20, 30, ?",
-        options: ["36", "40", "42", "48"],
-        answer: "42",
-        explanation: "Differences are 4, 6, 8, 10. Next difference is 12. 30+12 = 42.",
-        category: "Logical"
-    },
-    {
-        id: "apt-29",
-        question: "What is the probability of getting a sum 9 from two throws of a dice?",
-        options: ["1/6", "1/8", "1/9", "1/12"],
-        answer: "1/9",
-        explanation: "Total outcomes = 36. Outcomes for sum 9: (3,6), (4,5), (5,4), (6,3) = 4. Prob = 4/36 = 1/9.",
-        category: "Data Interpretation"
-    },
-    {
-        id: "apt-30",
-        question: "In how many ways can the letters of the word 'LEADER' be arranged?",
-        options: ["72", "144", "360", "720"],
-        answer: "360",
-        explanation: "LEADER has 6 letters with 'E' repeated twice. Total permutations = 6! / 2! = 720 / 2 = 360.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-31",
-        question: "If P denotes 'plus', Q denotes 'minus', R denotes 'multiplied by', and S denotes 'divided by', then 18 R 12 P 4 S 5 Q 6 = ?",
-        options: ["53/3", "210.8", "214", "None"],
-        answer: "210.8",
-        explanation: "18 * 12 + 4 / 5 - 6 = 216 + 0.8 - 6 = 210.8.",
-        category: "Logical"
-    },
-    {
-        id: "apt-32",
-        question: "Choose a word that means: 'One who cannot be corrected'",
-        options: ["Incorrigible", "Invulnerable", "Irreparable", "Ineligible"],
-        answer: "Incorrigible",
-        explanation: "Incorrigible means incapable of being corrected or reformed.",
-        category: "Verbal"
-    },
-    {
-        id: "apt-33",
-        question: "Statements: All bags are pockets. All pockets are pouches. Conclusions: I. All bags are pouches. II. All pouches are bags.",
-        options: ["Only I follows", "Only II follows", "Both I and II follow", "Neither follows"],
-        answer: "Only I follows",
-        explanation: "If Bags ⊂ Pockets and Pockets ⊂ Pouches, then Bags ⊂ Pouches. All bags are pouches. But all pouches may not be bags.",
-        category: "Logical"
-    },
-    {
-        id: "apt-34",
-        question: "A man buys a cycle for Rs. 1400 and sells it at a loss of 15%. What is the selling price of the cycle?",
-        options: ["Rs. 1090", "Rs. 1160", "Rs. 1190", "Rs. 1202"],
-        answer: "Rs. 1190",
-        explanation: "SP = 85% of 1400 = 0.85 * 1400 = 1190.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-35",
-        question: "Present ages of Sam and Anand are in the ratio of 5 : 4 respectively. Three years hence, the ratio of their ages will become 11 : 9 respectively. What is Anand's present age in years?",
-        options: ["24", "27", "40", "None"],
-        answer: "24",
-        explanation: "5x+3 / 4x+3 = 11/9. 45x+27 = 44x+33. x=6. Anand's age = 4x = 24.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-36",
-        question: "An error 2% in excess is made while measuring the side of a square. What is the percentage of error in the calculated area of the square?",
-        options: ["2%", "4%", "4.04%", "2.02%"],
-        answer: "4.04%",
-        explanation: "Area = x^2. If x -> 1.02x, Area -> (1.02x)^2 = 1.0404 x^2. Error = 4.04%.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-37",
-        question: "Find the odd one out: 10, 25, 45, 54, 60, 75, 80",
-        options: ["10", "45", "54", "75"],
-        answer: "54",
-        explanation: "All except 54 are multiples of 5.",
-        category: "Logical"
-    },
-    {
-        id: "apt-38",
-        question: "Synonym of 'GENUINE'?",
-        options: ["Fake", "Authentic", "Weak", "Stupid"],
-        answer: "Authentic",
-        explanation: "Genuine means real or authentic; not fake.",
-        category: "Verbal"
-    },
-    {
-        id: "apt-39",
-        question: "A boat can travel with a speed of 13 km/hr in still water. If the speed of the stream is 4 km/hr, find the time taken by the boat to go 68 km downstream.",
-        options: ["2 hours", "3 hours", "4 hours", "5 hours"],
-        answer: "4 hours",
-        explanation: "Speed downstream = 13 + 4 = 17 km/hr. Time = 68 / 17 = 4 hours.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-40",
-        question: "If 1st March 2008 was Saturday, what was the day on 1st March 2002?",
-        options: ["Friday", "Sunday", "Saturday", "Monday"],
-        answer: "Friday",
-        explanation: "2002 to 2008: 6 years. 2004 and 2008 were leap years, but March 1st 2008 includes the leap day of 2008. Total odd days = 6 + 2 = 8 mod 7 = 1. Saturday - 1 day = Friday.",
-        category: "Logical"
-    },
-    {
-        id: "apt-41",
-        question: "The cost price of 20 articles is the same as the selling price of x articles. If the profit is 25%, then the value of x is:",
-        options: ["15", "16", "18", "25"],
-        answer: "16",
-        explanation: "Let CP of 1 article = 1. CP of 20 = 20. SP of x = 20. CP of x = x. Profit = (SP-CP)/CP = (20-x)/x = 0.25. 20-x = 0.25x. 1.25x = 20. x = 16.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-42",
-        question: "Which of the following is a leap year?",
-        options: ["1900", "2000", "2100", "None"],
-        answer: "2000",
-        explanation: "Century years must be divisible by 400 to be leap years. 2000 is, 1900 and 2100 are not.",
-        category: "Logical"
-    },
-    {
-        id: "apt-43",
-        question: "What is the angle between the hands of a clock at 8:30?",
-        options: ["60 degrees", "75 degrees", "90 degrees", "105 degrees"],
-        answer: "75 degrees",
-        explanation: "Angle = |30h - 5.5m| = |30(8) - 5.5(30)| = |240 - 165| = 75 degrees.",
-        category: "Logical"
-    },
-    {
-        id: "apt-44",
-        question: "The least number which when divided by 5, 6, 7 and 8 leaves a remainder 3, but when divided by 9 leaves no remainder, is:",
-        options: ["1677", "1683", "2523", "3363"],
-        answer: "1683",
-        explanation: "LCM(5,6,7,8) = 840. Number is 840k + 3. For k=2, 840(2)+3 = 1683. 1683 is divisible by 9 (1+6+8+3=18).",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-45",
-        question: "Antonym of 'FRAGILE'?",
-        options: ["Robust", "Soft", "Weak", "Small"],
-        answer: "Robust",
-        explanation: "Fragile means easily broken; robust means strong and healthy.",
-        category: "Verbal"
-    },
-    {
-        id: "apt-46",
-        question: "If 5 spiders can catch 5 flies in 5 minutes, how many spiders are needed to catch 100 flies in 100 minutes?",
-        options: ["1", "5", "100", "20"],
-        answer: "5",
-        explanation: "M1*D1/W1 = M2*D2/W2. 5*5/5 = x*100/100. 5 = x. So 5 spiders.",
-        category: "Logical"
-    },
-    {
-        id: "apt-47",
-        question: "A sum of money doubles itself at compound interest in 15 years. It will become eight times itself in:",
-        options: ["30 years", "40 years", "45 years", "60 years"],
-        answer: "45 years",
-        explanation: "P to 2P in 15 years. It will take 15 more years for 2P to 4P, and 15 more for 4P to 8P. Total = 15*3 = 45 years.",
-        category: "Arithmetic"
-    },
-    {
-        id: "apt-48",
-        question: "Find the next number: 1, 1, 2, 6, 24, ?",
-        options: ["100", "120", "150", "240"],
-        answer: "120",
-        explanation: "1*1, 1*2, 2*3, 6*4, 24*5 = 120. (Factorial series starting from 0! or 1!)",
-        category: "Logical"
-    },
-    {
-        id: "apt-49",
-        question: "Choose a word that substitutes: 'A hater of mankind'",
-        options: ["Philanthropist", "Misogynist", "Misanthrope", "Misogamist"],
-        answer: "Misanthrope",
-        explanation: "Misanthrope means hater of mankind; misogynist is hater of women.",
-        category: "Verbal"
-    },
-    {
-        id: "apt-50",
-        question: "A wall clock takes 6 seconds to strike 4. How much time will it take to strike 10?",
-        options: ["18 seconds", "20 seconds", "15 seconds", "12 seconds"],
-        answer: "18 seconds",
-        explanation: "4 strikes have 3 intervals. 3 intervals = 6 seconds, so 1 interval = 2 seconds. 10 strikes have 9 intervals. Time = 9*2 = 18 seconds.",
-        category: "Logical"
-    },
-    {
-        id: "apt-51",
-        question: "If 'A' is substituted by 1, 'B' by 2 and so on, what will be the sum of digits of the word 'CAB'?",
-        options: ["6", "5", "7", "3"],
-        answer: "6",
-        explanation: "C=3, A=1, B=2. Sum = 3+1+2 = 6.",
-        category: "Logical"
-    }
+    { id: "apt-1", question: "A train running at 60 km/hr crosses a pole in 9 seconds. Length of the train?", options: ["120 m", "180 m", "324 m", "150 m"], answer: "150 m", explanation: "Speed=50/3 m/s. Length=(50/3)*9=150 m.", category: "Arithmetic" },
+    { id: "apt-2", question: "Average of 20 numbers is zero. At most how many may be greater than zero?", options: ["0", "1", "10", "19"], answer: "19", explanation: "Sum=0. If 19 are positive, 20th can be their negative sum.", category: "Arithmetic" },
+    { id: "apt-3", question: "Money triples at compound interest in 3 years. In how many years will it be 9 times?", options: ["9", "6", "12", "15"], answer: "6", explanation: "3P in 3 yrs → 9P=3² in 6 yrs.", category: "Arithmetic" },
+    { id: "apt-4", question: "Shopkeeper expects 25% profit on selling price. Actual profit %?", options: ["20%", "25%", "33.33%", "30%"], answer: "33.33%", explanation: "SP=100, Profit=25, CP=75. Profit%=25/75*100=33.33%.", category: "Arithmetic" },
+    { id: "apt-5", question: "Simple interest amounts to Rs.815 in 3 years and Rs.854 in 4 years. The sum is:", options: ["Rs.650", "Rs.690", "Rs.698", "Rs.700"], answer: "Rs.698", explanation: "SI/yr=39. SI 3yrs=117. P=815-117=698.", category: "Arithmetic" },
+    { id: "apt-6", question: "A person crosses a 600 m street in 5 minutes. Speed in km/hr?", options: ["3.6", "7.2", "8.4", "10"], answer: "7.2", explanation: "2 m/s = 7.2 km/hr.", category: "Arithmetic" },
+    { id: "apt-7", question: "Numbers in ratio 3:5. If 9 subtracted from each, ratio becomes 12:23. Smaller number:", options: ["27", "33", "49", "55"], answer: "33", explanation: "(3x-9)/(5x-9)=12/23 → x=11. Smaller=33.", category: "Arithmetic" },
+    { id: "apt-8", question: "Ages of A and B in ratio 4:3. After 6 years ratio is 11:9. B's present age:", options: ["9", "12", "18", "21"], answer: "12", explanation: "(4x+6)/(3x+6)=11/9 → x=4. B=12.", category: "Arithmetic" },
+    { id: "apt-9", question: "Cycle bought for Rs.1400, sold at 15% loss. Selling price:", options: ["Rs.1090", "Rs.1160", "Rs.1190", "Rs.1202"], answer: "Rs.1190", explanation: "SP=85%*1400=1190.", category: "Arithmetic" },
+    { id: "apt-10", question: "Pipes A and B fill a tank in 20 and 30 minutes. Together they fill in:", options: ["10 min", "12 min", "15 min", "25 min"], answer: "12 min", explanation: "1/20+1/30=1/12. Time=12 min.", category: "Arithmetic" },
+    { id: "apt-11", question: "Boat speed 13 km/hr in still water, stream 4 km/hr. Time to go 68 km downstream:", options: ["2 hrs", "3 hrs", "4 hrs", "5 hrs"], answer: "4 hrs", explanation: "Downstream=17 km/hr. 68/17=4 hrs.", category: "Arithmetic" },
+    { id: "apt-12", question: "CP of 20 articles = SP of x articles. Profit 25%. Value of x:", options: ["15", "16", "18", "25"], answer: "16", explanation: "(20-x)/x=0.25 → x=16.", category: "Arithmetic" },
+    { id: "apt-13", question: "Money doubles at CI in 15 years. It becomes 8 times in:", options: ["30", "40", "45", "60"], answer: "45", explanation: "2P in 15 yrs → 8P in 45 yrs.", category: "Arithmetic" },
+    { id: "apt-14", question: "Fruit seller sells 40% apples and still has 420. Originally he had:", options: ["588", "600", "672", "700"], answer: "700", explanation: "60%=420 → 100%=700.", category: "Arithmetic" },
+    { id: "apt-15", question: "Letters of 'LEADER' can be arranged in how many ways?", options: ["72", "144", "360", "720"], answer: "360", explanation: "6!/2!=360.", category: "Arithmetic" },
+    { id: "apt-16", question: "A, B, C do work in 20, 30, 60 days. A assisted by B and C every 3rd day. Days to complete:", options: ["12", "15", "16", "18"], answer: "15", explanation: "Every 3 days = 1/5 work. Total=15 days.", category: "Arithmetic" },
+    { id: "apt-17", question: "2% excess error in measuring side of square. % error in area:", options: ["2%", "4%", "4.04%", "2.02%"], answer: "4.04%", explanation: "(1.02)²=1.0404. Error=4.04%.", category: "Arithmetic" },
+    { id: "apt-18", question: "Ages of Sam and Anand in ratio 5:4. After 3 years ratio 11:9. Anand's age:", options: ["24", "27", "40", "None"], answer: "24", explanation: "x=6. Anand=4*6=24.", category: "Arithmetic" },
+    { id: "apt-19", question: "Clock takes 6 seconds to strike 4. Time to strike 10:", options: ["18 s", "20 s", "15 s", "12 s"], answer: "18 s", explanation: "3 intervals=6s. 9 intervals=18s.", category: "Arithmetic" },
+    { id: "apt-20", question: "Least number divisible by 5,6,7,8 leaving remainder 3, divisible by 9:", options: ["1677", "1683", "2523", "3363"], answer: "1683", explanation: "LCM=840. 840*2+3=1683. Digit sum=18.", category: "Arithmetic" },
+    { id: "apt-21", question: "3 times first of 3 consecutive odd integers is 3 more than twice the third. Third integer:", options: ["11", "13", "15", "17"], answer: "15", explanation: "3x=2(x+4)+3 → x=11. Third=15.", category: "Arithmetic" },
+    { id: "apt-22", question: "Probability of getting sum 9 from two dice throws:", options: ["1/6", "1/8", "1/9", "1/12"], answer: "1/9", explanation: "4 outcomes out of 36 = 1/9.", category: "Arithmetic" },
+    { id: "apt-23", question: "Train 125 m long passes a man running at 5 km/hr in same direction in 10 s. Train speed:", options: ["45", "50", "54", "55"], answer: "50 km/hr", explanation: "Relative=12.5 m/s=45 km/hr. Train=45+5=50.", category: "Arithmetic" },
+    { id: "apt-24", question: "A does work in 15 days, B in 20 days. Work together 4 days, A leaves. B finishes in:", options: ["10", "12", "15", "20"], answer: "10 days", explanation: "4 days work=7/15. Remaining=8/15. B=8/15*20≈10.67≈10 days.", category: "Arithmetic" },
+    { id: "apt-25", question: "SI on a sum for 5 years at 9% p.a. is Rs.4016.25. The sum is:", options: ["Rs.4462.50", "Rs.8032.50", "Rs.8900", "Rs.8925"], answer: "Rs.8925", explanation: "P=4016.25*100/45=8925.", category: "Arithmetic" },
+    { id: "apt-26", question: "Difference between CI and SI on Rs.1200 for 2 years at 10% p.a.:", options: ["Rs.12", "Rs.14", "Rs.16", "Rs.18"], answer: "Rs.12", explanation: "CI=252, SI=240. Diff=12.", category: "Arithmetic" },
+    { id: "apt-27", question: "A 270 m train at 120 km/hr crosses another at 80 km/hr in opposite direction in 9 s. Second train length:", options: ["230 m", "240 m", "260 m", "280 m"], answer: "230 m", explanation: "Relative=200 km/hr=500/9 m/s. Total=500. Second=230.", category: "Arithmetic" },
+    { id: "apt-28", question: "6 men and 8 boys do work in 10 days; 26 men and 48 boys in 2 days. 15 men and 20 boys finish in:", options: ["4", "5", "6", "7"], answer: "4 days", explanation: "1m=1/100, 1b=1/200. 15m+20b=1/4. 4 days.", category: "Arithmetic" },
+    { id: "apt-29", question: "Find the odd one out: 3, 5, 11, 14, 17, 21", options: ["21", "17", "14", "3"], answer: "14", explanation: "All except 14 are odd numbers.", category: "Logical" },
+    { id: "apt-30", question: "Harsh looks at a portrait: 'His mother is the wife of my father's son. No siblings.' Whose portrait?", options: ["His son", "His cousin", "His uncle", "His nephew"], answer: "His son", explanation: "Father's son=Harsh. Man's mother=Harsh's wife. Man=Harsh's son.", category: "Logical" },
+    { id: "apt-31", question: "How many times are clock hands at right angle in a day?", options: ["22", "24", "44", "48"], answer: "44", explanation: "22 times in 12 hrs × 2 = 44.", category: "Logical" },
+    { id: "apt-32", question: "Find the missing number: 4, 9, 20, 43, 90, ?", options: ["185", "180", "175", "190"], answer: "185", explanation: "Pattern: *2+1,+2,+3,+4,+5. 90*2+5=185.", category: "Logical" },
+    { id: "apt-33", question: "1st January 2001 was Monday. What day was 1st January 2005?", options: ["Friday", "Saturday", "Sunday", "Monday"], answer: "Saturday", explanation: "4 years, 2004 leap. Odd days=5. Mon+5=Sat.", category: "Logical" },
+    { id: "apt-34", question: "FRIEND coded as HUMJTK. How is CANDLE coded?", options: ["EDRIRL", "DCQHQK", "ESJFME", "FYOBOC"], answer: "EDRIRL", explanation: "Shift +2,+3,+4,+5,+6,+7. C→E,A→D,N→R,D→I,L→R,E→L.", category: "Logical" },
+    { id: "apt-35", question: "All bags are pockets. All pockets are pouches. Conclusion: I. All bags are pouches. II. All pouches are bags.", options: ["Only I", "Only II", "Both", "Neither"], answer: "Only I", explanation: "Bags⊂Pockets⊂Pouches. I is true, II is not.", category: "Logical" },
+    { id: "apt-36", question: "Find the odd one out: 10, 25, 45, 54, 60, 75, 80", options: ["10", "45", "54", "75"], answer: "54", explanation: "All except 54 are multiples of 5.", category: "Logical" },
+    { id: "apt-37", question: "Next number: 121, 144, 169, 196, ?", options: ["225", "256", "289", "324"], answer: "225", explanation: "11²,12²,13²,14²,15²=225.", category: "Logical" },
+    { id: "apt-38", question: "'Tree' is called 'sky'. On which does a fruit grow?", options: ["Water", "Food", "Tree", "Sky"], answer: "Sky", explanation: "Fruits grow on tree, and tree is called sky.", category: "Logical" },
+    { id: "apt-39", question: "18 R 12 P 4 S 5 Q 6 = ? (R=*, P=+, S=/, Q=-)", options: ["53/3", "210.8", "214", "None"], answer: "210.8", explanation: "18*12+4/5-6=216+0.8-6=210.8.", category: "Logical" },
+    { id: "apt-40", question: "Which is a leap year?", options: ["1900", "2000", "2100", "None"], answer: "2000", explanation: "Century years divisible by 400 are leap years.", category: "Logical" },
+    { id: "apt-41", question: "Angle between clock hands at 8:30?", options: ["60°", "75°", "90°", "105°"], answer: "75°", explanation: "|30*8-5.5*30|=|240-165|=75°.", category: "Logical" },
+    { id: "apt-42", question: "Find the missing number: 2, 6, 12, 20, 30, ?", options: ["36", "40", "42", "48"], answer: "42", explanation: "Differences: 4,6,8,10,12. 30+12=42.", category: "Logical" },
+    { id: "apt-43", question: "Next number: 1, 1, 2, 6, 24, ?", options: ["100", "120", "150", "240"], answer: "120", explanation: "Factorials: 5!=120.", category: "Logical" },
+    { id: "apt-44", question: "5 spiders catch 5 flies in 5 minutes. Spiders needed to catch 100 flies in 100 minutes:", options: ["1", "5", "100", "20"], answer: "5", explanation: "1 spider catches 20 flies in 100 min. 5 spiders catch 100.", category: "Logical" },
+    { id: "apt-45", question: "Sum of digits of 'CAB' (A=1, B=2, C=3...)?", options: ["6", "5", "7", "3"], answer: "6", explanation: "C=3,A=1,B=2. Sum=6.", category: "Logical" },
+    { id: "apt-46", question: "Pointing to a photo, lady says 'I am the only daughter of this lady and her son is your maternal uncle.' How is speaker related to Pramod's father?", options: ["Sister-in-law", "Wife", "Mother", "Aunt"], answer: "Wife", explanation: "Speaker is Pramod's mother = Pramod's father's wife.", category: "Logical" },
+    { id: "apt-47", question: "Which is NOT divisible by 11: 121, 132, 143, 145?", options: ["121", "132", "143", "145"], answer: "145", explanation: "121=11², 132=11*12, 143=11*13. 145 is not.", category: "Logical" },
+    { id: "apt-48", question: "1st March 2008 was Saturday. Day on 1st March 2002?", options: ["Friday", "Sunday", "Saturday", "Monday"], answer: "Friday", explanation: "6 yrs back, 2 leap years. Odd days=8 mod 7=1. Sat-1=Fri.", category: "Logical" },
+    { id: "apt-49", question: "Clock shows 3:15. Angle between hour and minute hands?", options: ["0°", "7.5°", "15°", "22.5°"], answer: "7.5°", explanation: "|30*3-5.5*15|=|90-82.5|=7.5°.", category: "Logical" },
+    { id: "apt-50", question: "Rajan is 10th from left, Suresh 9th from right. After exchange, Rajan is 15th from left. Total boys:", options: ["23", "24", "25", "26"], answer: "23", explanation: "Suresh's position from left = n-8 = 15. n=23.", category: "Logical" },
+    { id: "apt-51", question: "Which is not a prime number: 31, 61, 71, 91?", options: ["31", "61", "71", "91"], answer: "91", explanation: "91=7*13.", category: "Logical" },
+    { id: "apt-52", question: "Find the missing: 8, 27, 64, 125, ?", options: ["196", "216", "225", "256"], answer: "216", explanation: "2³,3³,4³,5³,6³=216.", category: "Logical" },
+    { id: "apt-53", question: "A is B's sister. C is B's mother. D is C's father. How is A related to D?", options: ["Grandmother", "Granddaughter", "Daughter", "Niece"], answer: "Granddaughter", explanation: "A→C's daughter→D's granddaughter.", category: "Logical" },
+    { id: "apt-54", question: "Synonym of 'ABANDON'?", options: ["Forsake", "Keep", "Cherish", "Hold"], answer: "Forsake", explanation: "Abandon = forsake.", category: "Verbal" },
+    { id: "apt-55", question: "Antonym of 'ENORMOUS'?", options: ["Soft", "Tiny", "Average", "Weak"], answer: "Tiny", explanation: "Enormous = huge; tiny = very small.", category: "Verbal" },
+    { id: "apt-56", question: "Correctly spelled word:", options: ["Accomodate", "Accommodate", "Acomodate", "Acommodate"], answer: "Accommodate", explanation: "Double 'c' and double 'm'.", category: "Verbal" },
+    { id: "apt-57", question: "Word for: 'A place where bees are kept'", options: ["Aviary", "Apiary", "Aquarium", "Orchard"], answer: "Apiary", explanation: "Apiary = place for bees.", category: "Verbal" },
+    { id: "apt-58", question: "Word for: 'One who cannot be corrected'", options: ["Incorrigible", "Invulnerable", "Irreparable", "Ineligible"], answer: "Incorrigible", explanation: "Incorrigible = cannot be corrected.", category: "Verbal" },
+    { id: "apt-59", question: "Synonym of 'GENUINE'?", options: ["Fake", "Authentic", "Weak", "Stupid"], answer: "Authentic", explanation: "Genuine = authentic.", category: "Verbal" },
+    { id: "apt-60", question: "Antonym of 'FRAGILE'?", options: ["Robust", "Soft", "Weak", "Small"], answer: "Robust", explanation: "Fragile = easily broken; robust = strong.", category: "Verbal" },
+    { id: "apt-61", question: "Word for: 'A hater of mankind'", options: ["Philanthropist", "Misogynist", "Misanthrope", "Misogamist"], answer: "Misanthrope", explanation: "Misanthrope = hater of mankind.", category: "Verbal" },
+    { id: "apt-62", question: "Synonym of 'LUCID'?", options: ["Murky", "Clear", "Dull", "Confused"], answer: "Clear", explanation: "Lucid = clear.", category: "Verbal" },
+    { id: "apt-63", question: "Antonym of 'VERBOSE'?", options: ["Talkative", "Concise", "Wordy", "Lengthy"], answer: "Concise", explanation: "Verbose = wordy; concise = brief.", category: "Verbal" },
+    { id: "apt-64", question: "Correctly spelled word:", options: ["Occurance", "Occurrence", "Occurence", "Ocurrence"], answer: "Occurrence", explanation: "Double 'c' and double 'r'.", category: "Verbal" },
+    { id: "apt-65", question: "Synonym of 'EPHEMERAL'?", options: ["Permanent", "Transient", "Eternal", "Lasting"], answer: "Transient", explanation: "Ephemeral = short-lived = transient.", category: "Verbal" },
+    { id: "apt-66", question: "Antonym of 'BENEVOLENT'?", options: ["Kind", "Generous", "Malevolent", "Charitable"], answer: "Malevolent", explanation: "Benevolent = kind; malevolent = evil.", category: "Verbal" },
+    { id: "apt-67", question: "Word for: 'One who studies the stars'", options: ["Astrologer", "Astronomer", "Astrophysicist", "Cosmologist"], answer: "Astronomer", explanation: "Astronomer = scientist studying stars.", category: "Verbal" },
+    { id: "apt-68", question: "Synonym of 'PERNICIOUS'?", options: ["Harmless", "Beneficial", "Harmful", "Neutral"], answer: "Harmful", explanation: "Pernicious = harmful.", category: "Verbal" },
+    { id: "apt-69", question: "Antonym of 'TACITURN'?", options: ["Silent", "Reserved", "Talkative", "Shy"], answer: "Talkative", explanation: "Taciturn = reserved; talkative is the antonym.", category: "Verbal" },
+    { id: "apt-70", question: "Synonym of 'SAGACIOUS'?", options: ["Foolish", "Wise", "Reckless", "Ignorant"], answer: "Wise", explanation: "Sagacious = having good judgment = wise.", category: "Verbal" },
+    { id: "apt-71", question: "In a class of 60 students, 40% are girls. How many boys?", options: ["24", "36", "40", "20"], answer: "36", explanation: "Girls=24. Boys=60-24=36.", category: "Data Interpretation" },
+    { id: "apt-72", question: "Revenue grew from Rs.50L to Rs.75L. Percentage increase?", options: ["25%", "33.33%", "50%", "66.67%"], answer: "50%", explanation: "25/50*100=50%.", category: "Data Interpretation" },
+    { id: "apt-73", question: "A sector represents 25% of total in a pie chart. Central angle?", options: ["45°", "60°", "90°", "120°"], answer: "90°", explanation: "25% of 360°=90°.", category: "Data Interpretation" },
+    { id: "apt-74", question: "Average marks of 5 students is 60. One scoring 80 is removed. New average:", options: ["50", "55", "57.5", "60"], answer: "55", explanation: "Total=300. New=220. Avg=220/4=55.", category: "Data Interpretation" },
+    { id: "apt-75", question: "Sales: Jan=200, Feb=250, Mar=300, Apr=350. Average monthly sales:", options: ["275", "280", "285", "300"], answer: "275", explanation: "(200+250+300+350)/4=275.", category: "Data Interpretation" },
+    { id: "apt-76", question: "Ratio of boys to girls is 3:2, total 600 students. Girls:", options: ["200", "240", "360", "400"], answer: "240", explanation: "2/5*600=240.", category: "Data Interpretation" },
+    { id: "apt-77", question: "Profit: A=Rs.500, B=Rs.300, C=Rs.200. % of total profit from A:", options: ["40%", "45%", "50%", "55%"], answer: "50%", explanation: "500/1000*100=50%.", category: "Data Interpretation" },
+    { id: "apt-78", question: "Scores: 75, 80, 90, 85, 70. Median score:", options: ["75", "80", "85", "90"], answer: "80", explanation: "Sorted: 70,75,80,85,90. Median=80.", category: "Data Interpretation" },
+    { id: "apt-79", question: "Population: 2010=10M, 2020=15M. Growth from 2010 to 2020:", options: ["20%", "25%", "50%", "66.67%"], answer: "50%", explanation: "(15-10)/10*100=50%.", category: "Data Interpretation" },
+    { id: "apt-80", question: "200 people: 60% prefer tea, 40% prefer coffee. How many more prefer tea?", options: ["20", "30", "40", "50"], answer: "40", explanation: "Tea=120, Coffee=80. Diff=40.", category: "Data Interpretation" },
+    { id: "apt-81", question: "Mode of {3, 5, 7, 5, 9, 3, 5}:", options: ["3", "5", "7", "9"], answer: "5", explanation: "5 appears 3 times.", category: "Data Interpretation" },
+    { id: "apt-82", question: "Company spends 30% on salaries. Total expenditure Rs.4L. Salary expenditure:", options: ["Rs.80,000", "Rs.1,00,000", "Rs.1,20,000", "Rs.1,50,000"], answer: "Rs.1,20,000", explanation: "30% of 4,00,000=1,20,000.", category: "Data Interpretation" },
+    { id: "apt-83", question: "Mean of 10 numbers is 50. One number added, new mean is 52. Added number:", options: ["60", "70", "72", "80"], answer: "72", explanation: "New sum=572. Added=572-500=72.", category: "Data Interpretation" },
+    { id: "apt-84", question: "Pie chart: HR=90°, Finance=60°, IT=120°. Angle for Marketing:", options: ["60°", "90°", "120°", "150°"], answer: "90°", explanation: "360-90-60-120=90°.", category: "Data Interpretation" },
+    { id: "apt-85", question: "Sales: Q1=2L, Q2=3L, Q3=2.5L, Q4=4L. Total annual sales:", options: ["10L", "11L", "11.5L", "12L"], answer: "11.5L", explanation: "2+3+2.5+4=11.5L.", category: "Data Interpretation" },
+    { id: "apt-86", question: "Dataset: 10, 20, 30, 40, 50. Range:", options: ["30", "40", "50", "60"], answer: "40", explanation: "Range=50-10=40.", category: "Data Interpretation" },
+    { id: "apt-87", question: "Student scored 65% in 200-mark exam. Marks scored:", options: ["120", "125", "130", "135"], answer: "130", explanation: "65% of 200=130.", category: "Data Interpretation" },
+    { id: "apt-88", question: "30 students scored 60-70, 10 scored 70-80, 15 scored 80-90. % scored above 70:", options: ["50%", "60%", "75%", "83.33%"], answer: "83.33%", explanation: "Wait — 5 scored 60-70, 10 scored 70-80, 15 scored 80-90. Total=30. Above 70=25. 25/30*100=83.33%.", category: "Data Interpretation" },
+    { id: "apt-89", question: "Expenses: Food=5000, Transport=2000, Entertainment=1000, Others=2000. Fraction on food:", options: ["1/2", "1/3", "1/4", "2/5"], answer: "1/2", explanation: "Total=10000. Food=5000=1/2.", category: "Data Interpretation" },
+    { id: "apt-90", question: "Variance of a dataset is 25. Standard deviation:", options: ["3", "4", "5", "6"], answer: "5", explanation: "SD=√25=5.", category: "Data Interpretation" },
+    { id: "apt-91", question: "Company profit for 5 years: 10L, 12L, 15L, 11L, 17L. Average profit:", options: ["12L", "13L", "14L", "15L"], answer: "13L", explanation: "65/5=13L.", category: "Data Interpretation" },
+    { id: "apt-92", question: "30 students play cricket, 20 play football, 10 play both. Students playing at least one sport:", options: ["30", "40", "50", "60"], answer: "40", explanation: "Union=30+20-10=40.", category: "Data Interpretation" },
+    { id: "apt-93", question: "Pie chart has 4 equal sectors. Central angle of each:", options: ["45°", "60°", "90°", "120°"], answer: "90°", explanation: "360/4=90°.", category: "Data Interpretation" },
+    { id: "apt-94", question: "3 out of 15 products are defective. Probability of picking a non-defective product:", options: ["1/5", "4/5", "2/5", "3/5"], answer: "4/5", explanation: "12/15=4/5.", category: "Data Interpretation" },
+    { id: "apt-95", question: "Sales: 2020=80 units, 2021=120 units. % change from 2020 to 2021:", options: ["25%", "33.33%", "50%", "66.67%"], answer: "50%", explanation: "(120-80)/80*100=50%.", category: "Data Interpretation" },
+    { id: "apt-96", question: "Weighted average with weights 2,3,5 and scores 70,80,90:", options: ["80", "82", "83", "85"], answer: "83", explanation: "(140+240+450)/10=83.", category: "Data Interpretation" },
+    { id: "apt-97", question: "5 values: 10, 20, 30, 40, and one unknown. Mean=25. Unknown value:", options: ["20", "25", "30", "35"], answer: "25", explanation: "Sum=125. Unknown=125-100=25.", category: "Data Interpretation" },
+    { id: "apt-98", question: "40% of 500 respondents preferred Brand A. How many?", options: ["150", "175", "200", "250"], answer: "200", explanation: "40% of 500=200.", category: "Data Interpretation" },
+    { id: "apt-99", question: "Temperatures: Mon=20°C, Tue=22°C, Wed=25°C, Thu=23°C, Fri=21°C. Average:", options: ["21°C", "22°C", "22.2°C", "23°C"], answer: "22.2°C", explanation: "111/5=22.2°C.", category: "Data Interpretation" },
+    { id: "apt-100", question: "Dataset: {2, 4, 4, 4, 5, 5, 7, 9}. Mean:", options: ["4", "5", "5.5", "6"], answer: "5", explanation: "40/8=5.", category: "Data Interpretation" },
 ];

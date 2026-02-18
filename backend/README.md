@@ -27,7 +27,7 @@ This is the backend service for the AI Interview Platform.
    ```env
    SUPABASE_URL=your_supabase_url
    SUPABASE_KEY=your_supabase_key
-   OPENAI_API_KEY=your_openai_api_key
+   GEMINI_API_KEY=your_gemini_api_key
    # Add any other required keys
    ```
 

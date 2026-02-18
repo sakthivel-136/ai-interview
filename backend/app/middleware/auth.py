@@ -8,9 +8,12 @@ security = HTTPBearer()
 
 def get_supabase_client() -> Client:
     try:
+        if not settings.SUPABASE_URL or not settings.SUPABASE_KEY:
+             print(f"DEBUG ERROR: Missing Supabase config. URL: {bool(settings.SUPABASE_URL)}, Key: {bool(settings.SUPABASE_KEY)}")
         return create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Could not connect to Supabase")
+        print(f"DEBUG ERROR: Supabase connection failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Could not connect to Supabase: {str(e)}")
 
 async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """

@@ -24,7 +24,8 @@ export default function AptitudePage() {
     const [timeLeft, setTimeLeft] = useState(600) // 10 minutes
     const [submitting, setSubmitting] = useState(false)
     const [started, setStarted] = useState(false)
-    const { isFullScreen, enterFullScreen, exitGracefully, blocked, loading: fsLoading } = useFullScreen()
+    const [showResult, setShowResult] = useState<{ score: number, passed: boolean } | null>(null)
+    const { isFullScreen, isEntering, enterFullScreen, exitGracefully, blocked, loading: fsLoading, breach, reportExit } = useFullScreen()
 
     useEffect(() => {
         const shuffled = [...aptitudeQuestions].sort(() => 0.5 - Math.random())
@@ -34,16 +35,14 @@ export default function AptitudePage() {
 
     // Core submit logic — forceSubmit=true skips the "all answered" check (used on timeout)
     const handleSubmitInternal = useCallback(async (forceSubmit = false) => {
-        if (submitting) return
+        if (submitting || showResult) return
         if (!forceSubmit && Object.keys(answers).length < questions.length) {
             alert('Please answer all questions before submitting.')
             return
         }
 
+        // Exit full-screen gracefully only when leaving
         setSubmitting(true)
-
-        // Exit full-screen gracefully so it doesn't trigger the security breach handler
-        await exitGracefully()
 
         // Calculate score locally
         let correctCount = 0
@@ -54,7 +53,7 @@ export default function AptitudePage() {
         const percentage = questions.length > 0 ? (correctCount / questions.length) * 100 : 0
         const isPassed = percentage >= 70
 
-        // Sync to backend (non-blocking)
+        // Sync to backend
         if (session?.access_token) {
             try {
                 await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/mock/aptitude/submit`, {
@@ -70,24 +69,20 @@ export default function AptitudePage() {
             }
         }
 
-        if (isPassed) {
-            router.push('/mock/round2-intro')
-        } else {
-            alert(`You scored ${percentage.toFixed(1)}%. A minimum of 70% is required to proceed. Please try again.`)
-            router.push('/dashboard')
-        }
-    }, [submitting, answers, questions, exitGracefully, session, router])
+        setShowResult({ score: percentage, passed: isPassed })
+        setSubmitting(false)
+    }, [submitting, answers, questions, exitGracefully, session?.access_token, showResult])
 
     // Timer — only runs after session starts
     useEffect(() => {
-        if (!started) return
+        if (!started || showResult) return
         if (timeLeft <= 0) {
             handleSubmitInternal(true)
             return
         }
         const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000)
         return () => clearInterval(timer)
-    }, [timeLeft, started, handleSubmitInternal])
+    }, [timeLeft, started, handleSubmitInternal, showResult])
 
     const handleSelect = (qId: string, option: string) => {
         setAnswers(prev => ({ ...prev, [qId]: option }))
@@ -99,7 +94,8 @@ export default function AptitudePage() {
         return `${m}:${s < 10 ? '0' : ''}${s}`
     }
 
-    if (loading || fsLoading) return (
+    // Only show loader for actual question shuffling (which is instant)
+    if (loading) return (
         <div className="min-h-screen bg-white flex flex-col justify-center items-center gap-4">
             <div className="w-12 h-12 border-4 border-blue-100 border-t-[#000066] rounded-full animate-spin" />
             <p className="text-[#000066] font-black uppercase tracking-widest text-xs">Initializing Session...</p>
@@ -123,8 +119,8 @@ export default function AptitudePage() {
         )
     }
 
-    // Pre-session screen (not started or not in fullscreen)
-    if (!started || !isFullScreen) {
+    // Pre-session screen (not started)
+    if (!started) {
         return (
             <div className="min-h-screen bg-[#000066] flex items-center justify-center p-8 relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10">
@@ -151,9 +147,9 @@ export default function AptitudePage() {
                             </div>
                         </div>
                         <button
-                            onClick={() => {
+                            onClick={async () => {
+                                await enterFullScreen()
                                 setStarted(true)
-                                enterFullScreen()
                             }}
                             className="w-full bg-[#000066] hover:bg-blue-900 text-white font-black py-6 rounded-2xl shadow-xl text-xl transition-all active:scale-[0.98] flex items-center justify-center gap-3"
                         >
@@ -167,6 +163,34 @@ export default function AptitudePage() {
 
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900 pb-20 select-none">
+            {/* Full-Screen Enforcement Overlay */}
+            {breach && !isFullScreen && !isEntering && !submitting && (
+                <div className="fixed inset-0 bg-[#000066]/95 backdrop-blur-xl z-[100] flex items-center justify-center p-8">
+                    <div className="max-w-md w-full text-center bg-white p-12 rounded-[40px] shadow-2xl border border-white/20 animate-in fade-in zoom-in duration-300">
+                        <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <AlertCircle className="w-12 h-12 text-red-600" />
+                        </div>
+                        <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-tight leading-none">Security Breach</h2>
+                        <p className="text-slate-500 mb-10 font-medium leading-relaxed">
+                            Assessment protocol has been breached. Re-engage immediate lock to prevent session termination.
+                        </p>
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={enterFullScreen}
+                                className="w-full bg-[#000066] hover:bg-blue-900 text-white font-black py-6 rounded-2xl shadow-xl shadow-blue-900/40 text-lg transition-all active:scale-[0.95]"
+                            >
+                                Resume Secure Session
+                            </button>
+                            <button
+                                onClick={reportExit}
+                                className="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-4 rounded-2xl transition-all"
+                            >
+                                Terminate & Exit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Header / Timer */}
             <div className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 z-50">
                 <div className="max-w-7xl mx-auto px-8 h-20 flex justify-between items-center">
@@ -257,6 +281,45 @@ export default function AptitudePage() {
                     </button>
                 </div>
             </div>
+
+            {/* Results Modal */}
+            {showResult && (
+                <div className="fixed inset-0 bg-[#000066]/90 backdrop-blur-xl z-[200] flex items-center justify-center p-8">
+                    <div className="max-w-2xl w-full bg-white rounded-[40px] p-12 shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 opacity-10">
+                            <CheckCircle2 className="w-32 h-32 text-[#000066]" />
+                        </div>
+
+                        <div className="relative z-10 flex flex-col items-center text-center">
+                            <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-8 ${showResult.passed ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
+                                {showResult.passed ? <CheckCircle2 className="w-12 h-12" /> : <AlertCircle className="w-12 h-12" />}
+                            </div>
+
+                            <h2 className="text-4xl font-black text-slate-900 mb-2 uppercase tracking-tight">
+                                {showResult.passed ? 'Phase 01 Cleared' : 'Round 01 Failed'}
+                            </h2>
+                            <p className="text-slate-500 font-medium mb-12">
+                                Scored: <span className="text-[#000066] font-bold">{showResult.score.toFixed(1)}%</span>
+                                <span className="mx-2">|</span>
+                                Threshold: <span className="font-bold">70%</span>
+                            </p>
+
+                            <button
+                                onClick={() => {
+                                    if (showResult.passed) {
+                                        router.push('/mock/round2-intro')
+                                    } else {
+                                        router.push('/dashboard')
+                                    }
+                                }}
+                                className="w-full bg-[#000066] text-white font-black py-6 rounded-2xl shadow-xl shadow-blue-900/20 text-xl transition-all active:scale-[0.98]"
+                            >
+                                {showResult.passed ? 'Continue to Technical' : 'Return to Dashboard'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

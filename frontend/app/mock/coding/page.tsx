@@ -21,40 +21,57 @@ export default function MockCodingPage() {
     const router = useRouter()
     const [problems, setProblems] = useState<Problem[]>([])
     const [currentProblemIdx, setCurrentProblemIdx] = useState(0)
+    const [showResult, setShowResult] = useState<{ score: number, passed: boolean, message: string } | null>(null)
     const [codeMap, setCodeMap] = useState<Record<string, string>>({})
     const [loading, setLoading] = useState(true)
     const [submitting, setSubmitting] = useState(false)
-    const { isFullScreen, enterFullScreen, exitGracefully, blocked, loading: fsLoading } = useFullScreen()
+    const { isFullScreen, enterFullScreen, exitGracefully, blocked, loading: fsLoading, breach, reportExit } = useFullScreen()
     const [started, setStarted] = useState(false)
     const [timeLeft, setTimeLeft] = useState(1200) // 20 minutes
     const supabase = createClient()
 
+    // Single stable useEffect for initialization
     useEffect(() => {
-        // Randomly select 3 problems from the static asset
-        const shuffled = [...codingProblems].sort(() => 0.5 - Math.random())
-        const selected = shuffled.slice(0, 3)
-        setProblems(selected as Problem[])
+        if (!session?.access_token) return
 
-        const initialCode: Record<string, string> = {}
-        selected.forEach(p => {
-            initialCode[p.id] = (p as any).starter_code || '# Write your code here\nprint("Hello")'
-        })
-        setCodeMap(initialCode)
-        setLoading(false)
-    }, [])
+        const fetchProblems = async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/mock/coding/questions`, {
+                    headers: {
+                        'Authorization': `Bearer ${session.access_token}`
+                    }
+                })
+                if (res.ok) {
+                    const selected = await res.json()
+                    setProblems(selected)
+
+                    const initialCode: Record<string, string> = {}
+                    selected.forEach((p: any) => {
+                        initialCode[p.id] = p.starter_code || '# Write your code here\nprint("Hello")'
+                    })
+                    setCodeMap(initialCode)
+                }
+            } catch (e) {
+                console.error("Error fetching problems:", e)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchProblems()
+    }, [session?.access_token]) // Stable dependency
 
     useEffect(() => {
         if (!started) return
         if (timeLeft <= 0) {
-            alert("Session Expired: The 20-minute coding window has closed. Redirecting to dashboard.")
-            router.push('/dashboard')
+            handleFinalSubmit() // Auto-submit on timeout
             return
         }
         const timer = setInterval(() => {
             setTimeLeft(prev => prev - 1)
         }, 1000)
         return () => clearInterval(timer)
-    }, [timeLeft, started, router])
+    }, [timeLeft, started])
 
     const formatTime = (seconds: number) => {
         const m = Math.floor(seconds / 60)
@@ -77,7 +94,7 @@ export default function MockCodingPage() {
     const handleFinalSubmit = async () => {
         setSubmitting(true)
 
-        // Exit full-screen gracefully before submission to prevent termination
+        // Exit full-screen gracefully before submission
         await exitGracefully()
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/mock/coding/submit`, {
@@ -91,18 +108,13 @@ export default function MockCodingPage() {
 
             const data = await res.json()
             if (res.ok) {
-                if (data.passed) {
-                    router.push('/mock/round3-intro')
-                } else {
-                    alert(`Round Failed. Score: ${data.score}%\n\nFeedback:\n${data.message}`)
-                    router.push('/dashboard')
-                }
+                setShowResult(data)
             } else {
-                alert("Error evaluating solutions")
+                alert("Error evaluating solutions. Please contact support.")
             }
         } catch (e) {
             console.error(e)
-            alert("Network error")
+            alert("Network error. Please check your connection.")
         } finally {
             setSubmitting(false)
         }
@@ -132,7 +144,7 @@ export default function MockCodingPage() {
         )
     }
 
-    if (!isFullScreen || !started) {
+    if (!started) {
         return (
             <div className="min-h-screen bg-[#000066] flex items-center justify-center p-8 relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10">
@@ -160,8 +172,8 @@ export default function MockCodingPage() {
                             </div>
                         </div>
                         <button
-                            onClick={() => {
-                                enterFullScreen()
+                            onClick={async () => {
+                                await enterFullScreen()
                                 setStarted(true)
                             }}
                             className="w-full bg-[#000066] hover:bg-blue-900 text-white font-black py-6 rounded-2xl shadow-xl shadow-blue-900/20 text-xl transition-all active:scale-[0.98] flex items-center justify-center gap-3"
@@ -177,24 +189,32 @@ export default function MockCodingPage() {
     const currentProblem = problems[currentProblemIdx]
 
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col select-none">
-            {/* Full-Screen Enforcement Overlay */}
-            {!isFullScreen && (
-                <div className="fixed inset-0 bg-[#000066]/95 backdrop-blur-xl z-[100] flex items-center justify-center p-8">
-                    <div className="max-w-md w-full text-center bg-white p-12 rounded-[40px] shadow-2xl border border-white/20 animate-in fade-in zoom-in duration-300">
+        <div className="min-h-screen bg-[#0a0a0b] text-white flex flex-col h-screen overflow-hidden select-none">
+            {/* Security Breach Overlay */}
+            {breach && !isFullScreen && (
+                <div className="fixed inset-0 bg-[#000066]/95 backdrop-blur-xl z-[100] flex items-center justify-center p-8 text-slate-900 text-center">
+                    <div className="max-w-md w-full bg-white p-12 rounded-[40px] shadow-2xl animate-in fade-in zoom-in duration-300">
                         <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-8">
                             <AlertCircle className="w-12 h-12 text-red-600" />
                         </div>
-                        <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-tight leading-none">Security Breach</h2>
-                        <p className="text-slate-500 mb-10 font-medium leading-relaxed">
-                            Full-screen protocol has been breached. Re-engage immediate lock to prevent session termination.
+                        <h2 className="text-3xl font-black mb-4 uppercase tracking-tight">Security Breach</h2>
+                        <p className="text-slate-500 mb-10 font-medium">
+                            Assessment protocol has been breached. Re-engage immediate lock to prevent session termination.
                         </p>
-                        <button
-                            onClick={enterFullScreen}
-                            className="w-full bg-[#000066] hover:bg-blue-900 text-white font-black py-6 rounded-2xl shadow-xl shadow-blue-900/40 text-lg transition-all active:scale-[0.95]"
-                        >
-                            Resume Secure Session
-                        </button>
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={enterFullScreen}
+                                className="w-full bg-[#000066] text-white font-black py-6 rounded-2xl shadow-xl hover:bg-blue-900 transition-all"
+                            >
+                                Resume Secure Session
+                            </button>
+                            <button
+                                onClick={reportExit}
+                                className="w-full bg-slate-100 text-slate-600 font-bold py-4 rounded-2xl hover:bg-slate-200 transition-all"
+                            >
+                                Terminate & Exit
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
@@ -296,6 +316,47 @@ export default function MockCodingPage() {
                     </div>
                 </div>
             </div>
+            {/* Result Modal */}
+            {showResult && (
+                <div className="fixed inset-0 bg-[#000066]/90 backdrop-blur-xl z-[200] flex items-center justify-center p-8">
+                    <div className="max-w-2xl w-full bg-white rounded-[40px] p-12 shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 opacity-10">
+                            <Save className="w-32 h-32 text-[#000066]" />
+                        </div>
+
+                        <div className="relative z-10 flex flex-col items-center text-center">
+                            <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-8 ${showResult.passed ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
+                                {showResult.passed ? <Maximize2 className="w-12 h-12" /> : <AlertCircle className="w-12 h-12" />}
+                            </div>
+
+                            <h2 className="text-4xl font-black text-slate-900 mb-2 uppercase tracking-tight">
+                                {showResult.passed ? 'Phase 02 Cleared' : 'Evaluation Failed'}
+                            </h2>
+                            <p className="text-slate-500 font-medium mb-8">Performance Score: <span className="text-[#000066] font-bold">{showResult.score}%</span></p>
+
+                            <div className="w-full bg-slate-50 rounded-3xl p-8 mb-10 text-left border border-slate-100">
+                                <span className="block text-[10px] font-black text-[#000066] uppercase tracking-widest mb-4">AI Technical Feedback</span>
+                                <p className="text-slate-600 font-medium leading-relaxed whitespace-pre-wrap italic">
+                                    "{showResult.message}"
+                                </p>
+                            </div>
+
+                            <button
+                                onClick={() => {
+                                    if (showResult.passed) {
+                                        router.push('/mock/round3-intro')
+                                    } else {
+                                        router.push('/dashboard')
+                                    }
+                                }}
+                                className="w-full bg-[#000066] text-white font-black py-6 rounded-2xl shadow-xl shadow-blue-900/20 text-xl transition-all active:scale-[0.98]"
+                            >
+                                {showResult.passed ? 'Initiate Final Phase' : 'Return to Dashboard'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

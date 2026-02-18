@@ -3,7 +3,7 @@ import json
 import time
 from dotenv import load_dotenv
 from supabase import create_client, Client
-import google.generativeai as genai
+from mistralai import Mistral
 
 load_dotenv()
 
@@ -12,14 +12,18 @@ url: str = os.getenv("SUPABASE_URL")
 key: str = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
-# Gemini Config
-gemini_key = os.getenv("GEMINI_API_KEY")
-genai.configure(api_key=gemini_key)
-model = genai.GenerativeModel("gemini-flash-latest")
+# Mistral Config
+api_key = os.getenv("MISTRAL_API_KEY")
+model_name = os.getenv("MISTRAL_MODEL", "mistral-small-latest")
 
 def generate_problems(count=100):
-    print(f"Generating {count} high-quality problems using Gemini...")
+    print(f"Generating {count} high-quality problems using Mistral...")
     
+    if not api_key:
+        print("Error: No Mistral API key found in .env")
+        return []
+
+    client = Mistral(api_key=api_key)
     categories = ["Arrays", "Strings", "Linked Lists", "Trees", "Graphs", "Dynamic Programming", "Greedy", "Backtracking", "Stacks", "Queues"]
     
     all_problems = []
@@ -42,30 +46,46 @@ def generate_problems(count=100):
         """
         
         try:
-            response = model.generate_content(prompt)
-            content = response.text.strip()
-            # Clean possible markdown wrap
-            if content.startswith("```json"):
-                content = content[7:-3].strip()
-            elif content.startswith("```"):
-                content = content[3:-3].strip()
-                
-            batch_data = json.loads(content)
-            all_problems.extend(batch_data)
-            print(f"Generated {len(all_problems)}/{count} problems...")
+            print(f"Generating batch for {cat}...")
+            messages = [
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
+            ]
             
-            # Simple rate limiting/breather
-            time.sleep(2)
+            response = client.chat.complete(
+                model=model_name,
+                messages=messages,
+                response_format={"type": "json_object"}
+            )
+            
+            content = response.choices[0].message.content
+            batch_data = json.loads(content)
+            
+            # Mistral might return a dictionary with a list inside, or just the list
+            if isinstance(batch_data, dict):
+                # Look for a list in any key
+                for k, v in batch_data.items():
+                    if isinstance(v, list):
+                        batch_data = v
+                        break
+            
+            if isinstance(batch_data, list):
+                all_problems.extend(batch_data)
+                print(f"Generated {len(all_problems)}/{count} problems...")
+            else:
+                print(f"Warning: Unexpected format from AI: {type(batch_data)}")
+                
         except Exception as e:
-            print(f"Error generating batch starting at {i}: {e}")
+            print(f"Error generating batch: {e}")
+            
+        # Simple rate limiting/breather
+        time.sleep(1)
             
     return all_problems
 
 def populate():
-    # 1. Clear existing generic problems? 
-    # The user might want to keep some, but they mentioned "Algorithm Challenge #..." are bad.
-    # supabase.table("problems").delete().neq("title", "KEEP ME").execute() # Optional
-    
     new_problems = generate_problems(100)
     
     print(f"Inserting {len(new_problems)} problems into Supabase...")

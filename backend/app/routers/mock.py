@@ -38,14 +38,13 @@ def get_aptitude_questions(user = Depends(get_current_user)):
 
 @router.post("/aptitude/submit")
 def submit_aptitude(submission: AptitudeSubmitSchema, user = Depends(get_current_user)):
+    import time
+    start = time.time()
+    print(f"DEBUG: [0s] Aptitude submission start")
     supabase = get_supabase_client()
     
     score = 0
     total = 0
-    
-    # Verify answers
-    # Ideally fetch all correct answers in one go
-    # For MVP, iterate (inefficient but simple) or fetch all matching IDs
     
     print(f"DEBUG: Submitting aptitude answers for user {user.user.id}")
     question_ids = list(submission.answers.keys())
@@ -54,6 +53,7 @@ def submit_aptitude(submission: AptitudeSubmitSchema, user = Depends(get_current
 
     try:
         response = supabase.table("aptitude_questions").select("id, correct_answer").in_("id", question_ids).execute()
+        print(f"DEBUG: [{time.time() - start:.2f}s] DB Correct answers fetched")
         correct_map = {item['id']: item['correct_answer'] for item in response.data}
         
         for q_id, user_ans in submission.answers.items():
@@ -64,8 +64,6 @@ def submit_aptitude(submission: AptitudeSubmitSchema, user = Depends(get_current
         percentage = (score / total) * 100 if total > 0 else 0
         passed = percentage >= 70
         
-        print(f"DEBUG: Score: {score}/{total} ({percentage}%), Passed: {passed}")
-
         # Record Attempt
         attempt_data = {
             "user_id": user.user.id,
@@ -73,14 +71,13 @@ def submit_aptitude(submission: AptitudeSubmitSchema, user = Depends(get_current
             "score": int(percentage),
             "passed": passed
         }
-        print(f"DEBUG: Inserting mock_attempt: {attempt_data}")
         supabase.table("mock_attempts").insert(attempt_data).execute()
+        print(f"DEBUG: [{time.time() - start:.2f}s] DB Attempt recorded")
         
+        print(f"DEBUG: TOTAL APTITUDE TIME: {time.time() - start:.2f}s")
         return {"score": percentage, "passed": passed}
     except Exception as e:
         print(f"DEBUG: Error in submit_aptitude: {str(e)}")
-        import traceback
-        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 @router.get("/hr/questions")
@@ -110,10 +107,14 @@ def get_hr_questions(user = Depends(get_current_user)):
 
 @router.post("/hr/submit")
 def submit_hr_answer(submission: HRSubmitSchema, user = Depends(get_current_user)):
+    import time
+    start = time.time()
+    print(f"DEBUG: [0s] HR submission start")
     from app.services.openai_service import evaluate_hr_answer
     
     # 1. AI Evaluation
     evaluation = evaluate_hr_answer(submission.question, submission.answer)
+    print(f"DEBUG: [{time.time() - start:.2f}s] AI Evaluation done")
     
     ai_score = evaluation.get("score", 0)
     sentiment = evaluation.get("sentiment", "Neutral")
@@ -131,14 +132,16 @@ def submit_hr_answer(submission: HRSubmitSchema, user = Depends(get_current_user
         "confidence": confidence
     }).execute()
     
-    # 3. Update HR Mock Attempt (Keep record of this round)
+    # 3. Update HR Mock Attempt
     supabase.table("mock_attempts").insert({
         "user_id": user.user.id,
         "round": "HR",
         "score": ai_score,
         "passed": ai_score >= 70
     }).execute()
+    print(f"DEBUG: [{time.time() - start:.2f}s] DB Records saved")
     
+    print(f"DEBUG: TOTAL HR TIME: {time.time() - start:.2f}s")
     return {"ai_score": ai_score, "sentiment": sentiment, "feedback": feedback}
 
 @router.get("/technical/questions")
@@ -165,12 +168,46 @@ def get_technical_questions(user = Depends(get_current_user)):
     random.shuffle(questions)
     return questions[:5] # Return 5 random ones
 
+@router.get("/technical/resume-questions")
+def get_resume_based_technical_questions(user = Depends(get_current_user)):
+    """
+    Generates 5 tricky technical questions based on the user's actual resume.
+    Questions target their specific skills, projects, and technologies.
+    """
+    from app.services.openai_service import generate_resume_technical_questions
+    supabase = get_supabase_client()
+
+    # Fetch the user's resume text
+    resume_data = supabase.table("resume_analysis") \
+        .select("resume_text") \
+        .eq("user_id", user.user.id) \
+        .limit(1).execute()
+
+    if not resume_data.data or not resume_data.data[0].get("resume_text"):
+        # No resume on file — fall back to static questions
+        fallback = [
+            "Walk me through the most complex technical decision you made in your most recent project.",
+            "What data structures did you use in your projects and what were the trade-offs?",
+            "How did you handle errors and edge cases in your backend/API work?",
+            "Explain the architecture of one of your projects — what would you change now?",
+            "What was the biggest performance bottleneck you encountered and how did you solve it?"
+        ]
+        return {"questions": fallback, "source": "fallback"}
+
+    resume_text = resume_data.data[0]["resume_text"]
+    questions = generate_resume_technical_questions(resume_text)
+    return {"questions": questions, "source": "resume"}
+
 @router.post("/technical/submit")
 def submit_technical_answer(submission: HRSubmitSchema, user = Depends(get_current_user)):
+    import time
+    start = time.time()
+    print(f"DEBUG: [0s] Technical submission start")
     from app.services.openai_service import evaluate_technical_answer
     
     # 1. AI Evaluation
     evaluation = evaluate_technical_answer(submission.question, submission.answer)
+    print(f"DEBUG: [{time.time() - start:.2f}s] AI Evaluation done")
     
     ai_score = evaluation.get("score", 0)
     feedback = evaluation.get("feedback", "")
@@ -193,8 +230,22 @@ def submit_technical_answer(submission: HRSubmitSchema, user = Depends(get_curre
         "score": ai_score,
         "passed": ai_score >= 70
     }).execute()
-
+    print(f"DEBUG: [{time.time() - start:.2f}s] DB Records saved")
+    
+    print(f"DEBUG: TOTAL TECHNICAL TIME: {time.time() - start:.2f}s")
     return {"ai_score": ai_score, "feedback": feedback}
+
+@router.get("/coding/questions")
+def get_coding_questions(user = Depends(get_current_user)):
+    supabase = get_supabase_client()
+    # Randomly select 3 problems from the database
+    # For simplicity, fetch all IDs and pick 3, or use a better random method
+    res = supabase.table("problems").select("id, title, description, starter_code").execute()
+    problems = res.data or []
+    if len(problems) > 3:
+        random.shuffle(problems)
+        return problems[:3]
+    return problems
 
 @router.post("/coding/submit")
 def submit_coding_round(submission: dict = Body(...), user = Depends(get_current_user)):
@@ -210,7 +261,21 @@ def submit_coding_round(submission: dict = Body(...), user = Depends(get_current
     count = 0
     
     # 1. Fetch problem details for prompt context
-    problem_ids = list(solutions.keys())
+    import uuid
+    problem_ids = []
+    for pid in solutions.keys():
+        try:
+            uuid.UUID(str(pid))
+            problem_ids.append(pid)
+        except ValueError:
+            print(f"DEBUG: Skipping invalid UUID problem ID: {pid}")
+            continue
+
+    if not problem_ids:
+        # If no valid UUIDs but solutions were provided, they might be legacy IDs
+        # return empty result or handle gracefully
+        return {"score": 0, "passed": False, "message": "No valid technical problems found for evaluation."}
+
     problems_res = supabase.table("problems").select("id, title, description").in_("id", problem_ids).execute()
     problem_map = {p['id']: p for p in problems_res.data}
 

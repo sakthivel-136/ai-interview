@@ -425,5 +425,389 @@ export const codingProblems: CodingProblem[] = [
         difficulty: "Easy",
         category: "Math/Dynamic Programming",
         starter_code: "def fib(n):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-53",
+        title: "Valid Anagram",
+        description: "Given two strings s and t, return true if t is an anagram of s, and false otherwise. An anagram is a word or phrase formed by rearranging the letters of a different word or phrase.",
+        difficulty: "Easy",
+        category: "Strings",
+        starter_code: "def isAnagram(s, t):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-54",
+        title: "Group Anagrams",
+        description: "Given an array of strings strs, group the anagrams together. You can return the answer in any order.",
+        difficulty: "Medium",
+        category: "Hash Table",
+        starter_code: "def groupAnagrams(strs):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-55",
+        title: "Top K Frequent Elements",
+        description: "Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.",
+        difficulty: "Medium",
+        category: "Heap",
+        starter_code: "def topKFrequent(nums, k):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-56",
+        title: "Product of Array Except Self",
+        description: "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. You must write an algorithm that runs in O(n) time without using the division operation.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def productExceptSelf(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-57",
+        title: "Encode and Decode Strings",
+        description: "Design an algorithm to encode a list of strings to a single string. The encoded string is then sent over the network and is decoded back to the original list of strings.",
+        difficulty: "Medium",
+        category: "Strings",
+        starter_code: "def encode(strs):\n    # Write your code here\n    pass\n\ndef decode(s):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-58",
+        title: "Longest Consecutive Sequence",
+        description: "Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence. You must write an algorithm that runs in O(n) time.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def longestConsecutive(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-59",
+        title: "Container With Most Water",
+        description: "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]). Find two lines that together with the x-axis form a container, such that the container contains the most water.",
+        difficulty: "Medium",
+        category: "Two Pointers",
+        starter_code: "def maxArea(height):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-60",
+        title: "3Sum",
+        description: "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.",
+        difficulty: "Medium",
+        category: "Two Pointers",
+        starter_code: "def threeSum(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-61",
+        title: "Binary Tree Level Order Traversal",
+        description: "Given the root of a binary tree, return the level order traversal of its nodes' values (i.e., from left to right, level by level).",
+        difficulty: "Medium",
+        category: "Trees",
+        starter_code: "def levelOrder(root):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-62",
+        title: "Validate Binary Search Tree",
+        description: "Given the root of a binary tree, determine if it is a valid binary search tree (BST).",
+        difficulty: "Medium",
+        category: "Trees",
+        starter_code: "def isValidBST(root):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-63",
+        title: "Kth Smallest Element in a BST",
+        description: "Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.",
+        difficulty: "Medium",
+        category: "Trees",
+        starter_code: "def kthSmallest(root, k):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-64",
+        title: "Construct Binary Tree from Preorder and Inorder Traversal",
+        description: "Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.",
+        difficulty: "Medium",
+        category: "Trees",
+        starter_code: "def buildTree(preorder, inorder):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-65",
+        title: "Number of Islands",
+        description: "Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.",
+        difficulty: "Medium",
+        category: "DFS/BFS",
+        starter_code: "def numIslands(grid):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-66",
+        title: "Clone Graph",
+        description: "Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph.",
+        difficulty: "Medium",
+        category: "Graph",
+        starter_code: "def cloneGraph(node):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-67",
+        title: "Course Schedule",
+        description: "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites. Return true if you can finish all courses, otherwise return false.",
+        difficulty: "Medium",
+        category: "Graph",
+        starter_code: "def canFinish(numCourses, prerequisites):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-68",
+        title: "Pacific Atlantic Water Flow",
+        description: "There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. Return a list of grid coordinates where water can flow to both the Pacific and Atlantic oceans.",
+        difficulty: "Medium",
+        category: "DFS/BFS",
+        starter_code: "def pacificAtlantic(heights):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-69",
+        title: "Coin Change",
+        description: "You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money. Return the fewest number of coins that you need to make up that amount.",
+        difficulty: "Medium",
+        category: "Dynamic Programming",
+        starter_code: "def coinChange(coins, amount):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-70",
+        title: "Longest Increasing Subsequence",
+        description: "Given an integer array nums, return the length of the longest strictly increasing subsequence.",
+        difficulty: "Medium",
+        category: "Dynamic Programming",
+        starter_code: "def lengthOfLIS(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-71",
+        title: "Word Break",
+        description: "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.",
+        difficulty: "Medium",
+        category: "Dynamic Programming",
+        starter_code: "def wordBreak(s, wordDict):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-72",
+        title: "Combination Sum",
+        description: "Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target.",
+        difficulty: "Medium",
+        category: "Backtracking",
+        starter_code: "def combinationSum(candidates, target):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-73",
+        title: "Subsets",
+        description: "Given an integer array nums of unique elements, return all possible subsets (the power set). The solution set must not contain duplicate subsets.",
+        difficulty: "Medium",
+        category: "Backtracking",
+        starter_code: "def subsets(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-74",
+        title: "Permutations",
+        description: "Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.",
+        difficulty: "Medium",
+        category: "Backtracking",
+        starter_code: "def permute(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-75",
+        title: "Find Minimum in Rotated Sorted Array",
+        description: "Suppose an array of length n sorted in ascending order is rotated between 1 and n times. Given the sorted rotated array nums of unique elements, return the minimum element of this array.",
+        difficulty: "Medium",
+        category: "Binary Search",
+        starter_code: "def findMin(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-76",
+        title: "Search in Rotated Sorted Array",
+        description: "Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.",
+        difficulty: "Medium",
+        category: "Binary Search",
+        starter_code: "def search(nums, target):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-77",
+        title: "Merge K Sorted Lists",
+        description: "You are given an array of k linked-lists lists, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.",
+        difficulty: "Hard",
+        category: "Heap",
+        starter_code: "def mergeKLists(lists):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-78",
+        title: "Reverse Nodes in k-Group",
+        description: "Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.",
+        difficulty: "Hard",
+        category: "Linked List",
+        starter_code: "def reverseKGroup(head, k):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-79",
+        title: "Trapping Rain Water",
+        description: "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
+        difficulty: "Hard",
+        category: "Two Pointers",
+        starter_code: "def trap(height):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-80",
+        title: "Sliding Window Maximum",
+        description: "You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. Return the max sliding window.",
+        difficulty: "Hard",
+        category: "Sliding Window",
+        starter_code: "def maxSlidingWindow(nums, k):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-81",
+        title: "Minimum Window Substring",
+        description: "Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window.",
+        difficulty: "Hard",
+        category: "Sliding Window",
+        starter_code: "def minWindow(s, t):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-82",
+        title: "Serialize and Deserialize Binary Tree",
+        description: "Design an algorithm to serialize and deserialize a binary tree. Serialization is the process of converting a data structure into a sequence of bits so that it can be stored or transmitted.",
+        difficulty: "Hard",
+        category: "Trees",
+        starter_code: "def serialize(root):\n    # Write your code here\n    pass\n\ndef deserialize(data):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-83",
+        title: "Binary Tree Maximum Path Sum",
+        description: "A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. The path sum is the sum of the node's values in the path. Given the root of a binary tree, return the maximum path sum of any non-empty path.",
+        difficulty: "Hard",
+        category: "Trees",
+        starter_code: "def maxPathSum(root):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-84",
+        title: "Word Search II",
+        description: "Given an m x n board of characters and a list of strings words, return all words on the board. Each word must be constructed from letters of sequentially adjacent cells.",
+        difficulty: "Hard",
+        category: "Backtracking",
+        starter_code: "def findWords(board, words):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-85",
+        title: "Alien Dictionary",
+        description: "There is a new alien language that uses the English alphabet. However, the order among the letters is unknown to you. You are given a list of strings words from the alien language's dictionary. Return a string of the unique letters in the new alien language sorted in lexicographically increasing order by the new language's rules.",
+        difficulty: "Hard",
+        category: "Graph",
+        starter_code: "def alienOrder(words):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-86",
+        title: "Edit Distance",
+        description: "Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2. You have three operations: Insert, Delete, Replace a character.",
+        difficulty: "Hard",
+        category: "Dynamic Programming",
+        starter_code: "def minDistance(word1, word2):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-87",
+        title: "Burst Balloons",
+        description: "You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons. Return the maximum coins you can collect by bursting the balloons wisely.",
+        difficulty: "Hard",
+        category: "Dynamic Programming",
+        starter_code: "def maxCoins(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-88",
+        title: "Largest Rectangle in Histogram",
+        description: "Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.",
+        difficulty: "Hard",
+        category: "Stacks",
+        starter_code: "def largestRectangleArea(heights):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-89",
+        title: "Maximum Frequency Stack",
+        description: "Design a stack-like data structure to push elements to the stack and pop the most frequent element from the stack. Implement the FreqStack class with push and pop methods.",
+        difficulty: "Hard",
+        category: "Heap",
+        starter_code: "class FreqStack:\n    def __init__(self):\n        # Write your code here\n        pass\n\n    def push(self, val):\n        # Write your code here\n        pass\n\n    def pop(self):\n        # Write your code here\n        pass"
+    },
+    {
+        id: "code-90",
+        title: "Find Median from Data Stream",
+        description: "The MedianFinder class finds the median from a data stream. Implement addNum to add a number and findMedian to return the median of current data stream.",
+        difficulty: "Hard",
+        category: "Heap",
+        starter_code: "class MedianFinder:\n    def __init__(self):\n        # Write your code here\n        pass\n\n    def addNum(self, num):\n        # Write your code here\n        pass\n\n    def findMedian(self):\n        # Write your code here\n        pass"
+    },
+    {
+        id: "code-91",
+        title: "Rotate Array",
+        description: "Given an integer array nums, rotate the array to the right by k steps, where k is non-negative.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def rotate(nums, k):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-92",
+        title: "Jump Game",
+        description: "You are given an integer array nums. You are initially positioned at the first index, and each element in the array represents your maximum jump length at that position. Return true if you can reach the last index, or false otherwise.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def canJump(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-93",
+        title: "Gas Station",
+        description: "There are n gas stations along a circular route. You are given two integer arrays gas and cost. Return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def canCompleteCircuit(gas, cost):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-94",
+        title: "Partition Equal Subset Sum",
+        description: "Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.",
+        difficulty: "Medium",
+        category: "Dynamic Programming",
+        starter_code: "def canPartition(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-95",
+        title: "Unique Paths",
+        description: "There is a robot on an m x n grid. The robot is initially located at the top-left corner. The robot tries to move to the bottom-right corner. The robot can only move either down or right at any point in time. Return the number of possible unique paths.",
+        difficulty: "Medium",
+        category: "Dynamic Programming",
+        starter_code: "def uniquePaths(m, n):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-96",
+        title: "Decode Ways",
+        description: "A message containing letters from A-Z can be encoded into numbers using a mapping. Given a string s containing only digits, return the number of ways to decode it.",
+        difficulty: "Medium",
+        category: "Dynamic Programming",
+        starter_code: "def numDecodings(s):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-97",
+        title: "Sort Colors",
+        description: "Given an array nums with n objects colored red, white, or blue, represented by 0, 1, and 2 respectively, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.",
+        difficulty: "Medium",
+        category: "Sorting",
+        starter_code: "def sortColors(nums):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-98",
+        title: "Meeting Rooms II",
+        description: "Given an array of meeting time intervals intervals where intervals[i] = [starti, endi], return the minimum number of conference rooms required.",
+        difficulty: "Medium",
+        category: "Heap",
+        starter_code: "def minMeetingRooms(intervals):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-99",
+        title: "Spiral Matrix",
+        description: "Given an m x n matrix, return all elements of the matrix in spiral order.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def spiralOrder(matrix):\n    # Write your code here\n    pass"
+    },
+    {
+        id: "code-100",
+        title: "LRU Cache",
+        description: "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache. Implement the LRUCache class with get and put methods. Both operations should run in O(1) average time complexity.",
+        difficulty: "Hard",
+        category: "Hash Table",
+        starter_code: "class LRUCache:\n    def __init__(self, capacity):\n        # Write your code here\n        pass\n\n    def get(self, key):\n        # Write your code here\n        pass\n\n    def put(self, key, value):\n        # Write your code here\n        pass"
     }
 ];

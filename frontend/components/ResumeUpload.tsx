@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Upload, FileText, CheckCircle, AlertCircle, Loader2, RefreshCw, Shield, Zap } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
 
@@ -11,13 +11,22 @@ interface ResumeAnalysis {
     generated_questions: string[];
 }
 
+const PROGRESS_STEPS = [
+    "Parsing Document...",
+    "Running AI Analysis...",
+    "Generating Insights...",
+    "Finalizing Report...",
+];
+
 export default function ResumeUpload() {
     const [file, setFile] = useState<File | null>(null);
     const [text, setText] = useState("");
     const [isUploading, setIsUploading] = useState(false);
+    const [progressStep, setProgressStep] = useState(0);
     const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
     const [error, setError] = useState("");
     const [activeTab, setActiveTab] = useState<"file" | "text">("text");
+    const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const supabase = createBrowserClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -55,7 +64,16 @@ export default function ResumeUpload() {
         }
 
         setIsUploading(true);
+        setProgressStep(0);
         setError("");
+
+        // Cycle through progress steps every 800ms to show activity
+        progressIntervalRef.current = setInterval(() => {
+            setProgressStep(prev => (prev + 1) % PROGRESS_STEPS.length);
+        }, 800);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
 
         try {
             const { data: { session } } = await supabase.auth.getSession();
@@ -73,25 +91,37 @@ export default function ResumeUpload() {
             }
 
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+            console.log(`DEBUG: Starting neural analysis at ${apiUrl}/resume/analyze`);
+
             const res = await fetch(`${apiUrl}/resume/analyze`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${session.access_token}`,
                 },
                 body: formData,
+                signal: controller.signal
             });
+
+            clearTimeout(timeoutId);
 
             if (!res.ok) {
                 const errData = await res.json().catch(() => ({ detail: "Neural analysis failed" }));
+                console.error("DEBUG: Analysis response not OK", errData);
                 throw new Error(errData.detail || "Neural analysis failed");
             }
 
             const data = await res.json();
+            console.log("DEBUG: Neural analysis complete", data);
             setAnalysis(data);
-        } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : "System anomaly detected";
+        } catch (err: any) {
+            clearTimeout(timeoutId);
+            console.error("DEBUG: Neural analysis error", err);
+            const message = err.name === 'AbortError'
+                ? "Neural link timed out. Please try a smaller file or faster connection."
+                : (err instanceof Error ? err.message : "System anomaly detected");
             setError(message.toUpperCase());
         } finally {
+            if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
             setIsUploading(false);
         }
     };
@@ -192,12 +222,12 @@ export default function ResumeUpload() {
                     <button
                         onClick={handleUpload}
                         disabled={isUploading}
-                        className="w-full bg-[#000066] text-white py-6 rounded-3xl font-black text-xs uppercase tracking-[0.3em] hover:bg-blue-900 transition-all shadow-2xl shadow-blue-900/20 disabled:opacity-50 flex items-center justify-center gap-3 active:scale-[0.98]"
+                        className="w-full bg-[#000066] text-white py-6 rounded-3xl font-black text-xs uppercase tracking-[0.3em] hover:bg-blue-900 transition-all shadow-2xl shadow-blue-900/20 disabled:opacity-60 flex items-center justify-center gap-3 active:scale-[0.98]"
                     >
                         {isUploading ? (
                             <>
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                                Analyzing Neural Patterns...
+                                <Loader2 className="w-5 h-5 animate-spin flex-shrink-0" />
+                                <span className="transition-all duration-300">{PROGRESS_STEPS[progressStep]}</span>
                             </>
                         ) : (
                             <>

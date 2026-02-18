@@ -23,10 +23,22 @@ export default function ProblemDetailPage() {
     const id = Array.isArray(rawId) ? rawId[0] : rawId ?? ''
     const router = useRouter()
     const { session } = useAuth()
-    const [problem, setProblem] = useState<Problem | null>(null)
-    const [code, setCode] = useState('# Write your solution here\n')
+    const [problem, setProblem] = useState<Problem | null>(() => {
+        const found = codingProblems.find(p => p.id === id)
+            ?? codingProblems.find(p =>
+                id && p.id.toLowerCase().trim() === String(id).toLowerCase().trim()
+            );
+        return found as Problem | null;
+    })
+    const [code, setCode] = useState(() => {
+        const found = codingProblems.find(p => p.id === id)
+            ?? codingProblems.find(p =>
+                id && p.id.toLowerCase().trim() === String(id).toLowerCase().trim()
+            );
+        return found?.starter_code ?? '# Write your solution here\n';
+    })
     const [output, setOutput] = useState('')
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(!problem)
     const [evaluating, setEvaluating] = useState(false)
     const [result, setResult] = useState<{ status: string, message: string } | null>(null)
     const [hasPassed, setHasPassed] = useState(false)
@@ -34,48 +46,44 @@ export default function ProblemDetailPage() {
     const [timeLeft, setTimeLeft] = useState(1800) // 30 minutes
 
     useEffect(() => {
-        if (!id) {
-            setLoading(false)
-            return
-        }
+        const fetchProblemStatus = async () => {
+            try {
+                if (!id || !problem) return;
 
-        const fetchProblem = async () => {
-            // Find problem by exact ID match first, then fallback to normalized match
-            const found = codingProblems.find(p => p.id === id)
-                ?? codingProblems.find(p =>
-                    p.id.toLowerCase().trim() === String(id).toLowerCase().trim()
-                )
-
-            if (found) {
-                setProblem(found as Problem)
-                setCode(found.starter_code ?? '# Write your solution here\n')
-            }
-
-            // Check if already passed
-            if (session?.user) {
-                try {
-                    const { data: passData } = await supabase
-                        .from('submissions')
+                if (session?.user) {
+                    // Step 1: Find the Supabase UUID for this problem by matching title
+                    // (local IDs like "code-1" are not the same as Supabase UUIDs)
+                    const { data: problemRow } = await supabase
+                        .from('problems')
                         .select('id')
-                        .eq('user_id', session.user.id)
-                        .eq('problem_id', id)
-                        .eq('status', 'Pass')
-                        .maybeSingle()
+                        .eq('title', problem.title)
+                        .maybeSingle();
 
-                    if (passData) {
-                        setHasPassed(true)
-                        setResult({ status: 'Pass', message: 'MODULE ALREADY MASTERED. PROCEED TO NEXT CHALLENGE.' })
+                    if (problemRow?.id) {
+                        // Step 2: Check if user has a passing submission for this UUID
+                        const { data: passData } = await supabase
+                            .from('submissions')
+                            .select('id')
+                            .eq('user_id', session.user.id)
+                            .eq('problem_id', problemRow.id)
+                            .eq('status', 'Pass')
+                            .maybeSingle();
+
+                        if (passData) {
+                            setHasPassed(true);
+                            setResult({ status: 'Pass', message: 'MODULE ALREADY MASTERED. PROCEED TO NEXT CHALLENGE.' });
+                        }
                     }
-                } catch (e) {
-                    console.error('Failed to check submission status:', e)
                 }
+            } catch (e) {
+                console.error('Error fetching problem status:', e);
+            } finally {
+                setLoading(false);
             }
+        };
 
-            setLoading(false)
-        }
-
-        fetchProblem()
-    }, [id, session])
+        fetchProblemStatus();
+    }, [id, problem, session, supabase]);
 
     useEffect(() => {
         if (timeLeft <= 0) {
@@ -158,9 +166,9 @@ export default function ProblemDetailPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col pt-16">
-            {/* Fixed Header */}
-            <header className="border-b border-slate-100 bg-white/80 backdrop-blur-md fixed top-0 w-full z-50 h-16 flex items-center shadow-sm">
+        <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+            {/* Context Header (Relative to page) */}
+            <header className="border-b border-slate-100 bg-white/80 backdrop-blur-md w-full h-16 flex items-center shadow-sm">
                 <div className="max-w-[1400px] mx-auto w-full px-6 flex justify-between items-center">
                     <div className="flex items-center gap-6">
                         <Link href="/practice" className="p-2 hover:bg-slate-50 rounded-lg transition-colors group">
@@ -170,8 +178,8 @@ export default function ProblemDetailPage() {
                         <div className="flex items-center gap-3">
                             <h1 className="text-sm font-black text-slate-900 uppercase tracking-tight">{problem.title}</h1>
                             <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${problem.difficulty === 'Easy' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                                    problem.difficulty === 'Medium' ? 'bg-amber-50 text-amber-600 border-amber-100' :
-                                        'bg-rose-50 text-rose-600 border-rose-100'
+                                problem.difficulty === 'Medium' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                                    'bg-rose-50 text-rose-600 border-rose-100'
                                 }`}>
                                 {problem.difficulty}
                             </span>

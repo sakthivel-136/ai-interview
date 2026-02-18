@@ -19,6 +19,9 @@ async def analyze_resume_endpoint(
     text: Optional[str] = Form(None),
     user = Depends(get_current_user)
 ):
+    import time
+    start = time.time()
+    print(f"DEBUG: [0s] Resume analysis start")
     resume_text = ""
     
     # 1. Extract Text
@@ -36,16 +39,20 @@ async def analyze_resume_endpoint(
                     extracted = page.extract_text()
                     if extracted:
                         resume_text += extracted + "\n"
+                print(f"DEBUG: [{time.time() - start:.2f}s] PDF Text extraction done")
             except ImportError:
+                print("DEBUG: pypdf not found")
                 raise HTTPException(
                     status_code=500,
                     detail="PDF library not available. Please paste your resume text instead."
                 )
             except Exception as e:
+                print(f"DEBUG: PDF Error: {e}")
                 raise HTTPException(status_code=400, detail=f"Error reading PDF: {str(e)}")
         else:
             try:
                 resume_text = content.decode("utf-8")
+                print(f"DEBUG: [{time.time() - start:.2f}s] Text decoding done")
             except Exception:
                 raise HTTPException(status_code=400, detail="Could not decode file as UTF-8 text.")
     
@@ -54,6 +61,7 @@ async def analyze_resume_endpoint(
     
     # 2. Analyze with OpenAI
     analysis = analyze_resume(resume_text)
+    print(f"DEBUG: [{time.time() - start:.2f}s] AI Analysis done")
     
     # 3. Save to Database
     supabase = get_supabase_client()
@@ -68,10 +76,12 @@ async def analyze_resume_endpoint(
     
     try:
         supabase.table("resume_analysis").upsert(data, on_conflict="user_id").execute()
+        print(f"DEBUG: [{time.time() - start:.2f}s] DB Save successful")
     except Exception as e:
         # Table might not exist yet - still return the analysis
-        print(f"Warning: Could not save resume analysis to DB: {e}")
+        print(f"Warning: [{time.time() - start:.2f}s] Could not save resume analysis to DB: {e}")
     
+    print(f"DEBUG: TOTAL RESUME TIME: {time.time() - start:.2f}s")
     return analysis
 
 @router.get("/", response_model=Optional[ResumeAnalysisResponse])
