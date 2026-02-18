@@ -809,96 +809,95 @@ export const codingProblems: CodingProblem[] = [
         difficulty: "Hard",
         category: "Hash Table",
         starter_code: "class LRUCache:\n    def __init__(self, capacity):\n        # Write your code here\n        pass\n\n    def get(self, key):\n        # Write your code here\n        pass\n\n    def put(self, key, value):\n        # Write your code here\n        pass"
-    }
-
-    { 
-        id: "code-gen-8367b4aa", 
-        title: "Spiral Matrix Traversal with Constraints", 
-        description: "Given a matrix of integers, traverse it in a spiral order and return the elements in a list. However, you must skip all even numbers and only include odd numbers in the result.", 
-        difficulty: "Medium", 
-        category: "Arrays", 
-        starter_code: "def spiral_traversal(matrix):\n    pass", 
-        constraints: ["Matrix can be rectangular or square", "Matrix can have negative numbers"] 
     },
-    { 
-        id: "code-gen-969995db", 
-        title: "Binary Tree to Doubly Linked List", 
-        description: "Convert a binary search tree to a sorted doubly linked list in place. The left and right pointers in the tree should become the previous and next pointers in the linked list.", 
-        difficulty: "Medium", 
-        category: "Trees", 
-        starter_code: "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef convert_to_dll(root):\n    pass", 
-        constraints: ["The tree may have duplicate values", "The tree can be empty"] 
+    {
+        id: "code-gen-8367b4aa",
+        title: "Spiral Matrix Traversal with Constraints",
+        description: "Given a matrix of integers, traverse it in a spiral order and return the elements in a list. However, you must skip all even numbers and only include odd numbers in the result.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def spiral_traversal(matrix):\n    pass",
+        constraints: ["Matrix can be rectangular or square", "Matrix can have negative numbers"]
     },
-    { 
-        id: "code-gen-ece11eb6", 
-        title: "Find the Longest Substring with K Unique Characters", 
-        description: "Given a string, find the length of the longest substring that contains exactly K unique characters.", 
-        difficulty: "Hard", 
-        category: "Strings", 
-        starter_code: "def longest_substring_with_k_unique(s, k):\n    pass", 
-        constraints: ["String can contain only lowercase letters", "K can be zero"] 
+    {
+        id: "code-gen-969995db",
+        title: "Binary Tree to Doubly Linked List",
+        description: "Convert a binary search tree to a sorted doubly linked list in place. The left and right pointers in the tree should become the previous and next pointers in the linked list.",
+        difficulty: "Medium",
+        category: "Trees",
+        starter_code: "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef convert_to_dll(root):\n    pass",
+        constraints: ["The tree may have duplicate values", "The tree can be empty"]
     },
-    { 
-        id: "code-gen-92990d5e", 
-        title: "Minimum Number of Refueling Stops", 
-        description: "There are N gas stations along a highway. You start with an empty tank at one end and need to reach the other end. You are given the distances between stations and the amount of gas you can get at each station. Find the minimum number of refueling stops needed.", 
-        difficulty: "Hard", 
-        category: "Dynamic Programming", 
-        starter_code: "def min_refuel_stops(dist, capacity, gas_stations):\n    pass", 
-        constraints: ["Distances are given in miles", "Gas stations can be at any distance"] 
+    {
+        id: "code-gen-ece11eb6",
+        title: "Find the Longest Substring with K Unique Characters",
+        description: "Given a string, find the length of the longest substring that contains exactly K unique characters.",
+        difficulty: "Hard",
+        category: "Strings",
+        starter_code: "def longest_substring_with_k_unique(s, k):\n    pass",
+        constraints: ["String can contain only lowercase letters", "K can be zero"]
     },
-    { 
-        id: "code-gen-99611b47", 
-        title: "Find the Celebrity", 
-        description: "In a party of N people, one may be a celebrity. A celebrity is a person who does not know anyone but everyone knows them. Find the celebrity or return -1 if there is no celebrity.", 
-        difficulty: "Medium", 
-        category: "Graphs", 
-        starter_code: "def find_celebrity(n, knows):\n    pass", 
-        constraints: ["knows[i][j] = 1 if person i knows person j, else 0", "There can be at most one celebrity"] 
+    {
+        id: "code-gen-92990d5e",
+        title: "Minimum Number of Refueling Stops",
+        description: "There are N gas stations along a highway. You start with an empty tank at one end and need to reach the other end. You are given the distances between stations and the amount of gas you can get at each station. Find the minimum number of refueling stops needed.",
+        difficulty: "Hard",
+        category: "Dynamic Programming",
+        starter_code: "def min_refuel_stops(dist, capacity, gas_stations):\n    pass",
+        constraints: ["Distances are given in miles", "Gas stations can be at any distance"]
     },
-    { 
-        id: "code-gen-c1ed241c", 
-        title: "Maximum Product Subarray", 
-        description: "Given an integer array, find the contiguous subarray within the array (containing at least one number) which has the largest product.", 
-        difficulty: "Medium", 
-        category: "Arrays", 
-        starter_code: "def max_product_subarray(nums):\n    pass", 
-        constraints: ["Array can contain negative numbers", "Array can have zeros"] 
+    {
+        id: "code-gen-99611b47",
+        title: "Find the Celebrity",
+        description: "In a party of N people, one may be a celebrity. A celebrity is a person who does not know anyone but everyone knows them. Find the celebrity or return -1 if there is no celebrity.",
+        difficulty: "Medium",
+        category: "Graphs",
+        starter_code: "def find_celebrity(n, knows):\n    pass",
+        constraints: ["knows[i][j] = 1 if person i knows person j, else 0", "There can be at most one celebrity"]
     },
-    { 
-        id: "code-gen-7f64d3a7", 
-        title: "Word Ladder II", 
-        description: "Given two words (start and end) and a dictionary, find all shortest transformation sequences from start to end, such that only one letter can be changed at a time and each intermediate word must be in the dictionary.", 
-        difficulty: "Hard", 
-        category: "Graphs", 
-        starter_code: "def find_ladders(begin_word, end_word, word_list):\n    pass", 
-        constraints: ["Words can be of any length", "Dictionary can be empty"] 
+    {
+        id: "code-gen-c1ed241c",
+        title: "Maximum Product Subarray",
+        description: "Given an integer array, find the contiguous subarray within the array (containing at least one number) which has the largest product.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def max_product_subarray(nums):\n    pass",
+        constraints: ["Array can contain negative numbers", "Array can have zeros"]
     },
-    { 
-        id: "code-gen-3fa22e9b", 
-        title: "Find the Duplicate Number", 
-        description: "Given an array of integers where each number appears once except for one number that appears twice, find the duplicate number without modifying the array and using O(1) additional space.", 
-        difficulty: "Medium", 
-        category: "Arrays", 
-        starter_code: "def find_duplicate(nums):\n    pass", 
-        constraints: ["Array can contain negative numbers", "Array can have zeros"] 
+    {
+        id: "code-gen-7f64d3a7",
+        title: "Word Ladder II",
+        description: "Given two words (start and end) and a dictionary, find all shortest transformation sequences from start to end, such that only one letter can be changed at a time and each intermediate word must be in the dictionary.",
+        difficulty: "Hard",
+        category: "Graphs",
+        starter_code: "def find_ladders(begin_word, end_word, word_list):\n    pass",
+        constraints: ["Words can be of any length", "Dictionary can be empty"]
     },
-    { 
-        id: "code-gen-a2cbeb17", 
-        title: "Longest Increasing Path in a Matrix", 
-        description: "Given an integer matrix, find the length of the longest increasing path. From each cell, you can move to adjacent cells (up, down, left, right) with a strictly smaller value.", 
-        difficulty: "Hard", 
-        category: "Dynamic Programming", 
-        starter_code: "def longest_increasing_path(matrix):\n    pass", 
-        constraints: ["Matrix can be rectangular or square", "Matrix can have negative numbers"] 
+    {
+        id: "code-gen-3fa22e9b",
+        title: "Find the Duplicate Number",
+        description: "Given an array of integers where each number appears once except for one number that appears twice, find the duplicate number without modifying the array and using O(1) additional space.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def find_duplicate(nums):\n    pass",
+        constraints: ["Array can contain negative numbers", "Array can have zeros"]
     },
-    { 
-        id: "code-gen-a80b227d", 
-        title: "Merge Intervals", 
-        description: "Given a collection of intervals, merge all overlapping intervals.", 
-        difficulty: "Medium", 
-        category: "Arrays", 
-        starter_code: "def merge_intervals(intervals):\n    pass", 
-        constraints: ["Intervals can be empty", "Intervals can be overlapping"] 
+    {
+        id: "code-gen-a2cbeb17",
+        title: "Longest Increasing Path in a Matrix",
+        description: "Given an integer matrix, find the length of the longest increasing path. From each cell, you can move to adjacent cells (up, down, left, right) with a strictly smaller value.",
+        difficulty: "Hard",
+        category: "Dynamic Programming",
+        starter_code: "def longest_increasing_path(matrix):\n    pass",
+        constraints: ["Matrix can be rectangular or square", "Matrix can have negative numbers"]
+    },
+    {
+        id: "code-gen-a80b227d",
+        title: "Merge Intervals",
+        description: "Given a collection of intervals, merge all overlapping intervals.",
+        difficulty: "Medium",
+        category: "Arrays",
+        starter_code: "def merge_intervals(intervals):\n    pass",
+        constraints: ["Intervals can be empty", "Intervals can be overlapping"]
     },
 ];
