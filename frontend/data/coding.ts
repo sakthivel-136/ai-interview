@@ -900,7 +900,6 @@ export const codingProblems: CodingProblem[] = [
         starter_code: "def merge_intervals(intervals):\n    pass",
         constraints: ["Intervals can be empty", "Intervals can be overlapping"]
     },
-    export const codingProblemsExtension: CodingProblem[] = [
     {
         id: "code-101",
         title: "Min Stack",
