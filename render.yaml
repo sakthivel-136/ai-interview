@@ -5,22 +5,21 @@ services:
   - type: web
     name: vantage-backend
     runtime: python
-    region: singapore   # closest to India
+    region: singapore
     plan: free
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
+    pythonVersion: "3.11"
     envVars:
       - key: SUPABASE_URL
-        sync: false          # Set manually in Render dashboard
+        sync: false
       - key: SUPABASE_KEY
-        sync: false          # Set manually in Render dashboard
+        sync: false
       - key: MISTRAL_API_KEY
-        sync: false          # Set manually in Render dashboard
+        sync: false
       - key: MISTRAL_MODEL
         value: mistral-small-latest
       - key: FRONTEND_URL
-        sync: false          # Set to your Vercel URL after deploying frontend
-      - key: PYTHON_VERSION
-        value: "3.11"        # Render uses 3.11 by default (stable)
+        sync: false
