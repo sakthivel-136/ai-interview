@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { ChevronRight, Shield, Zap, BarChart3, Globe, Award } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useEffect, useState } from 'react'
@@ -20,8 +21,17 @@ export default function Home() {
       <nav className="absolute top-0 left-0 w-full z-50 bg-[#000066] border-b border-white/10 h-20 flex items-center shadow-2xl">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-black text-white tracking-tighter uppercase">
+            <div className="flex items-center gap-3">
+              <div className="relative w-8 h-8">
+                <Image
+                  src="/logo.png"
+                  alt="VANTAGE"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <span className="text-2xl font-black text-white tracking-tighter uppercase sm:block hidden">
                 VANTAGE
               </span>
             </div>

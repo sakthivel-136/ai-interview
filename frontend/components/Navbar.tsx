@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import { useState } from 'react'
@@ -30,8 +31,19 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                 <div className="flex items-center justify-between h-full">
                     {/* Logo */}
-                    <Link href="/dashboard" className="flex-shrink-0 text-white font-black text-2xl tracking-tighter uppercase transition-colors hover:text-blue-100">
-                        VANTAGE
+                    <Link href="/dashboard" className="flex items-center gap-3 flex-shrink-0 transition-opacity hover:opacity-80">
+                        <div className="relative w-8 h-8">
+                            <Image
+                                src="/logo.png"
+                                alt="VANTAGE"
+                                fill
+                                className="object-contain"
+                                priority
+                            />
+                        </div>
+                        <span className="text-white font-black text-2xl tracking-tighter uppercase hidden sm:block">
+                            VANTAGE
+                        </span>
                     </Link>
 
                     <div className="hidden md:flex items-center space-x-2">
@@ -69,35 +81,37 @@ export default function Navbar() {
                             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                         </button>
                     </div>
-                </div>
-            </div>
+                </div >
+            </div >
 
             {/* Mobile Menu */}
-            {mobileOpen && (
-                <div className="md:hidden absolute top-16 left-0 right-0 border-b border-white/10 bg-[#000066] px-4 py-4 space-y-1 shadow-2xl animate-in slide-in-from-top-2 duration-200">
-                    {navLinks.map(({ href, label, icon: Icon }) => (
-                        <Link
-                            key={href}
-                            href={href}
-                            onClick={() => setMobileOpen(false)}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith(href)
-                                ? 'bg-white text-[#000066]'
-                                : 'text-white/90 hover:text-white hover:bg-white/10'
-                                }`}
+            {
+                mobileOpen && (
+                    <div className="md:hidden absolute top-16 left-0 right-0 border-b border-white/10 bg-[#000066] px-4 py-4 space-y-1 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+                        {navLinks.map(({ href, label, icon: Icon }) => (
+                            <Link
+                                key={href}
+                                href={href}
+                                onClick={() => setMobileOpen(false)}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith(href)
+                                    ? 'bg-white text-[#000066]'
+                                    : 'text-white/90 hover:text-white hover:bg-white/10'
+                                    }`}
+                            >
+                                <Icon className="w-5 h-5 opacity-70" />
+                                {label}
+                            </Link>
+                        ))}
+                        <button
+                            onClick={() => { signOut(); setMobileOpen(false) }}
+                            className="flex items-center gap-3 w-full text-left text-white/60 hover:text-rose-400 hover:bg-rose-400/10 px-4 py-3 rounded-xl text-sm font-bold transition-colors"
                         >
-                            <Icon className="w-5 h-5 opacity-70" />
-                            {label}
-                        </Link>
-                    ))}
-                    <button
-                        onClick={() => { signOut(); setMobileOpen(false) }}
-                        className="flex items-center gap-3 w-full text-left text-white/60 hover:text-rose-400 hover:bg-rose-400/10 px-4 py-3 rounded-xl text-sm font-bold transition-colors"
-                    >
-                        <LogOut className="w-5 h-5 opacity-70" />
-                        Sign Out
-                    </button>
-                </div>
-            )}
-        </nav>
+                            <LogOut className="w-5 h-5 opacity-70" />
+                            Sign Out
+                        </button>
+                    </div>
+                )
+            }
+        </nav >
     )
 }
