@@ -108,4 +108,405 @@ export const aptitudeQuestions: AptitudeQuestion[] = [
     { id: "apt-98", question: "40% of 500 respondents preferred Brand A. How many?", options: ["150", "175", "200", "250"], answer: "200", explanation: "40% of 500=200.", category: "Data Interpretation" },
     { id: "apt-99", question: "Temperatures: Mon=20°C, Tue=22°C, Wed=25°C, Thu=23°C, Fri=21°C. Average:", options: ["21°C", "22°C", "22.2°C", "23°C"], answer: "22.2°C", explanation: "111/5=22.2°C.", category: "Data Interpretation" },
     { id: "apt-100", question: "Dataset: {2, 4, 4, 4, 5, 5, 7, 9}. Mean:", options: ["4", "5", "5.5", "6"], answer: "5", explanation: "40/8=5.", category: "Data Interpretation" },
+
+    { 
+        id: "apt-gen-334a5b", 
+        question: "If a train travels 300 km in 5 hours, what is its average speed in km/h?", 
+        options: ["60 km/h", "65 km/h", "70 km/h", "75 km/h"], 
+        answer: "60 km/h", 
+        explanation: "To find the average speed, divide the total distance by the total time. 300 km / 5 hours = 60 km/h.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-7dccf1", 
+        question: "If all Bloops are Razzies and all Razzies are Lazzies, then all Bloops are definitely Lazzies. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If all Bloops are Razzies and all Razzies are Lazzies, then by transitivity, all Bloops must be Lazzies.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-12d8e9", 
+        question: "Choose the word that is most opposite in meaning to 'Ephemeral':", 
+        options: ["Permanent", "Temporary", "Fleeting", "Transient"], 
+        answer: "Permanent", 
+        explanation: "'Ephemeral' means lasting for a very short time, so its opposite is 'Permanent'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-a4d10e", 
+        question: "If the ratio of the number of boys to girls in a class is 3:2 and there are 30 students in total, how many girls are there?", 
+        options: ["12", "18", "15", "10"], 
+        answer: "12", 
+        explanation: "The ratio 3:2 means for every 3 boys, there are 2 girls. Total parts = 3 + 2 = 5. Number of girls = (2/5) * 30 = 12.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-c753d7", 
+        question: "If it rains, the ground will get wet. The ground is wet. Did it rain?", 
+        options: ["Yes", "No", "Maybe", "Not necessarily"], 
+        answer: "Not necessarily", 
+        explanation: "The ground could be wet for other reasons, such as a sprinkler or a spill. Therefore, it is not necessarily true that it rained.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-c0dce3", 
+        question: "Choose the word that is most similar in meaning to 'Loquacious':", 
+        options: ["Reserved", "Talkative", "Silent", "Reticent"], 
+        answer: "Talkative", 
+        explanation: "'Loquacious' means tending to talk a lot, so its synonym is 'Talkative'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-34b861", 
+        question: "A car travels from A to B at a speed of 40 km/h and returns from B to A at 60 km/h. What is the average speed for the entire journey?", 
+        options: ["45 km/h", "48 km/h", "50 km/h", "55 km/h"], 
+        answer: "48 km/h", 
+        explanation: "To find the average speed for the entire journey, use the harmonic mean formula: 2 * (40 * 60) / (40 + 60) = 48 km/h.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-b6e48a", 
+        question: "If all A are B, and all B are C, then some A are C. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If all A are B and all B are C, then by transitivity, all A must be C. Therefore, some A are definitely C.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-41328b", 
+        question: "Choose the word that is most opposite in meaning to 'Meticulous':", 
+        options: ["Careful", "Sloppy", "Precise", "Accurate"], 
+        answer: "Sloppy", 
+        explanation: "'Meticulous' means very careful and precise, so its opposite is 'Sloppy'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-939101", 
+        question: "If a rectangle has a length of 8 cm and a width of 5 cm, what is its area?", 
+        options: ["13 cm\u00b2", "24 cm\u00b2", "30 cm\u00b2", "40 cm\u00b2"], 
+        answer: "40 cm²", 
+        explanation: "The area of a rectangle is calculated by multiplying its length by its width. 8 cm * 5 cm = 40 cm².", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-99bb1a", 
+        question: "If no X are Y and some Y are Z, then some Z are not X. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If no X are Y and some Y are Z, then those Y that are Z cannot be X. Therefore, some Z are not X.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-f10caf", 
+        question: "Choose the word that is most similar in meaning to 'Ebullient':", 
+        options: ["Gloomy", "Cheerful", "Sad", "Depressed"], 
+        answer: "Cheerful", 
+        explanation: "'Ebullient' means full of enthusiasm, so its synonym is 'Cheerful'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-d9c547", 
+        question: "If a circle has a radius of 7 cm, what is its circumference?", 
+        options: ["14 cm", "22 cm", "44 cm", "154 cm"], 
+        answer: "44 cm", 
+        explanation: "The circumference of a circle is calculated by multiplying the radius by 2π. 2 * 7 * π ≈ 44 cm.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-d02a01", 
+        question: "If some A are B and all B are C, then some A are C. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If some A are B and all B are C, then those A that are B must also be C. Therefore, some A are C.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-aaedc8", 
+        question: "Choose the word that is most opposite in meaning to 'Voracious':", 
+        options: ["Hungry", "Ravenous", "Indifferent", "Appetite"], 
+        answer: "Indifferent", 
+        explanation: "'Voracious' means having a huge appetite, so its opposite is 'Indifferent'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-623c0e", 
+        question: "If a triangle has sides of lengths 3 cm, 4 cm, and 5 cm, what type of triangle is it?", 
+        options: ["Equilateral", "Isosceles", "Scalene", "Right-angled"], 
+        answer: "Right-angled", 
+        explanation: "A triangle with sides 3 cm, 4 cm, and 5 cm is a right-angled triangle because it satisfies the Pythagorean theorem (3² + 4² = 5²).", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-ad8e1a", 
+        question: "If all X are Y and some Y are not Z, then some X are not Z. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If all X are Y and some Y are not Z, then those Y that are not Z cannot be X. Therefore, some X are not Z.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-7d9f86", 
+        question: "Choose the word that is most similar in meaning to 'Pusillanimous':", 
+        options: ["Brave", "Cowardly", "Fearless", "Daring"], 
+        answer: "Cowardly", 
+        explanation: "'Pusillanimous' means lacking courage or resolution, so its synonym is 'Cowardly'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-922326", 
+        question: "If a square has a side length of 6 cm, what is its area?", 
+        options: ["12 cm\u00b2", "24 cm\u00b2", "36 cm\u00b2", "48 cm\u00b2"], 
+        answer: "36 cm²", 
+        explanation: "The area of a square is calculated by squaring the length of one of its sides. 6 cm * 6 cm = 36 cm².", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-9926c5", 
+        question: "If no A are B and some B are C, then some C are not A. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If no A are B and some B are C, then those B that are C cannot be A. Therefore, some C are not A.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-b96a87", 
+        question: "Choose the word that is most opposite in meaning to 'Magnanimous':", 
+        options: ["Generous", "Stingy", "Kind", "Charitable"], 
+        answer: "Stingy", 
+        explanation: "'Magnanimous' means generous or forgiving, so its opposite is 'Stingy'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-003fd7", 
+        question: "If a rectangle has a length of 10 cm and a width of 6 cm, what is its perimeter?", 
+        options: ["22 cm", "28 cm", "32 cm", "36 cm"], 
+        answer: "32 cm", 
+        explanation: "The perimeter of a rectangle is calculated by adding twice the length and twice the width. 2 * 10 cm + 2 * 6 cm = 32 cm.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-4440bf", 
+        question: "If some A are B and no B are C, then some A are not C. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If some A are B and no B are C, then those A that are B cannot be C. Therefore, some A are not C.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-434f68", 
+        question: "Choose the word that is most similar in meaning to 'Quixotic':", 
+        options: ["Practical", "Realistic", "Idealistic", "Sensible"], 
+        answer: "Idealistic", 
+        explanation: "'Quixotic' means extremely idealistic, so its synonym is 'Idealistic'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-f6ae04", 
+        question: "If a triangle has sides of lengths 5 cm, 5 cm, and 8 cm, what type of triangle is it?", 
+        options: ["Equilateral", "Isosceles", "Scalene", "Right-angled"], 
+        answer: "Isosceles", 
+        explanation: "A triangle with two sides of equal length is an isosceles triangle. In this case, the sides of lengths 5 cm and 5 cm make it isosceles.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-d3beb3", 
+        question: "If all X are Y and some Y are not Z, then some X are not Z. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If all X are Y and some Y are not Z, then those X that are Y but not Z cannot be Z. Therefore, some X are not Z.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-b98282", 
+        question: "Choose the word that is most opposite in meaning to 'Pernicious':", 
+        options: ["Harmful", "Beneficial", "Damaging", "Detrimental"], 
+        answer: "Beneficial", 
+        explanation: "'Pernicious' means harmful or damaging, so its opposite is 'Beneficial'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-c7c480", 
+        question: "If a circle has a diameter of 14 cm, what is its area?", 
+        options: ["19 cm\u00b2", "38 cm\u00b2", "77 cm\u00b2", "154 cm\u00b2"], 
+        answer: "154 cm²", 
+        explanation: "The area of a circle is calculated by squaring the radius and multiplying by π. The radius is half the diameter, so 7 cm * 7 cm * π ≈ 154 cm².", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-fffde6", 
+        question: "If some A are B and all B are C, then some A are C. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If some A are B and all B are C, then those A that are B must also be C. Therefore, some A are C.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-427f73", 
+        question: "Choose the word that is most similar in meaning to 'Sycophant':", 
+        options: ["Critic", "Flatterer", "Detractor", "Adversary"], 
+        answer: "Flatterer", 
+        explanation: "'Sycophant' means a person who acts obsequiously toward someone important in order to gain advantage, so its synonym is 'Flatterer'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-b4ab50", 
+        question: "If a square has a perimeter of 40 cm, what is the length of one of its sides?", 
+        options: ["8 cm", "10 cm", "12 cm", "15 cm"], 
+        answer: "10 cm", 
+        explanation: "The perimeter of a square is calculated by multiplying the length of one side by 4. To find the length of one side, divide the perimeter by 4. 40 cm / 4 = 10 cm.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-f2cdd6", 
+        question: "If no X are Y and some Y are Z, then some Z are not X. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If no X are Y and some Y are Z, then those Y that are Z cannot be X. Therefore, some Z are not X.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-855a3e", 
+        question: "Choose the word that is most opposite in meaning to 'Parsimonious':", 
+        options: ["Generous", "Stingy", "Frugal", "Thrifty"], 
+        answer: "Generous", 
+        explanation: "'Parsimonious' means unwilling to spend money or use resources; stingy, so its opposite is 'Generous'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-c03862", 
+        question: "If a rectangle has a length of 12 cm and a width of 7 cm, what is its area?", 
+        options: ["19 cm\u00b2", "24 cm\u00b2", "84 cm\u00b2", "98 cm\u00b2"], 
+        answer: "84 cm²", 
+        explanation: "The area of a rectangle is calculated by multiplying its length by its width. 12 cm * 7 cm = 84 cm².", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-ebc01e", 
+        question: "If all X are Y and some Y are not Z, then some X are not Z. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If all X are Y and some Y are not Z, then those X that are Y but not Z cannot be Z. Therefore, some X are not Z.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-b5ee50", 
+        question: "Choose the word that is most similar in meaning to 'Capricious':", 
+        options: ["Steady", "Consistent", "Unpredictable", "Reliable"], 
+        answer: "Unpredictable", 
+        explanation: "'Capricious' means given to sudden and unaccountable changes of mood or behavior, so its synonym is 'Unpredictable'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-37cb5d", 
+        question: "If a triangle has sides of lengths 7 cm, 7 cm, and 7 cm, what type of triangle is it?", 
+        options: ["Equilateral", "Isosceles", "Scalene", "Right-angled"], 
+        answer: "Equilateral", 
+        explanation: "A triangle with all three sides of equal length is an equilateral triangle.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-90810a", 
+        question: "If some A are B and no B are C, then some A are not C. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If some A are B and no B are C, then those A that are B cannot be C. Therefore, some A are not C.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-bd12b7", 
+        question: "Choose the word that is most opposite in meaning to 'Intransigent':", 
+        options: ["Flexible", "Stubborn", "Uncompromising", "Adaptable"], 
+        answer: "Flexible", 
+        explanation: "'Intransigent' means refusing to change one's views or to agree about something, so its opposite is 'Flexible'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-0fca2f", 
+        question: "If a circle has a radius of 5 cm, what is its circumference?", 
+        options: ["10 cm", "20 cm", "30 cm", "40 cm"], 
+        answer: "20 cm", 
+        explanation: "The circumference of a circle is calculated by multiplying the radius by 2π. 2 * 5 * π ≈ 20 cm.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-fc211a", 
+        question: "If all X are Y and some Y are not Z, then some X are not Z. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If all X are Y and some Y are not Z, then those X that are Y but not Z cannot be Z. Therefore, some X are not Z.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-c97cbb", 
+        question: "Choose the word that is most similar in meaning to 'Mellifluous':", 
+        options: ["Harsh", "Harmonious", "Discordant", "Gritty"], 
+        answer: "Harmonious", 
+        explanation: "'Mellifluous' means sweet or musical; pleasant to hear, so its synonym is 'Harmonious'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-d192d8", 
+        question: "If a rectangle has a length of 9 cm and a width of 4 cm, what is its perimeter?", 
+        options: ["18 cm", "26 cm", "30 cm", "36 cm"], 
+        answer: "26 cm", 
+        explanation: "The perimeter of a rectangle is calculated by adding twice the length and twice the width. 2 * 9 cm + 2 * 4 cm = 26 cm.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-b953d0", 
+        question: "If some A are B and all B are C, then some A are C. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If some A are B and all B are C, then those A that are B must also be C. Therefore, some A are C.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-8d1d09", 
+        question: "Choose the word that is most opposite in meaning to 'Pusillanimous':", 
+        options: ["Brave", "Cowardly", "Fearless", "Daring"], 
+        answer: "Brave", 
+        explanation: "'Pusillanimous' means lacking courage or resolution, so its opposite is 'Brave'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-083a3f", 
+        question: "If a triangle has sides of lengths 6 cm, 8 cm, and 10 cm, what type of triangle is it?", 
+        options: ["Equilateral", "Isosceles", "Scalene", "Right-angled"], 
+        answer: "Right-angled", 
+        explanation: "A triangle with sides 6 cm, 8 cm, and 10 cm is a right-angled triangle because it satisfies the Pythagorean theorem (6² + 8² = 10²).", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-cefdba", 
+        question: "If no X are Y and some Y are Z, then some Z are not X. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If no X are Y and some Y are Z, then those Y that are Z cannot be X. Therefore, some Z are not X.", 
+        category: "Logical" 
+    },
+    { 
+        id: "apt-gen-ee8fbd", 
+        question: "Choose the word that is most similar in meaning to 'Quixotic':", 
+        options: ["Practical", "Realistic", "Idealistic", "Sensible"], 
+        answer: "Idealistic", 
+        explanation: "'Quixotic' means extremely idealistic, so its synonym is 'Idealistic'.", 
+        category: "Verbal" 
+    },
+    { 
+        id: "apt-gen-fc7aa6", 
+        question: "If a square has a side length of 8 cm, what is its perimeter?", 
+        options: ["16 cm", "24 cm", "32 cm", "40 cm"], 
+        answer: "32 cm", 
+        explanation: "The perimeter of a square is calculated by multiplying the length of one side by 4. 8 cm * 4 = 32 cm.", 
+        category: "Arithmetic" 
+    },
+    { 
+        id: "apt-gen-a660aa", 
+        question: "If all X are Y and some Y are not Z, then some X are not Z. True or False?", 
+        options: ["True", "False", "Sometimes", "Not enough information"], 
+        answer: "True", 
+        explanation: "If all X are Y and some Y are not Z, then those X that are Y but not Z cannot be Z. Therefore, some X are not Z.", 
+        category: "Logical" 
+    },
 ];

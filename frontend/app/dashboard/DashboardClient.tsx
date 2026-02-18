@@ -84,20 +84,20 @@ export default function DashboardClient() {
                 .select('*', { count: 'exact', head: true })
                 .eq('user_id', user.id)
 
-            // 3. Fetch Recent Activity & Calculate Streak
+            // 3. Fetch Recent Activity & Calculate Streak (Increased limit for accuracy)
             const { data: mockData } = await supabase
                 .from('mock_attempts')
                 .select('created_at, round, score, passed')
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false })
-                .limit(10)
+                .limit(50)
 
             const { data: subData } = await supabase
                 .from('submissions')
                 .select('created_at, status, score, problems(title)')
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false })
-                .limit(10)
+                .limit(50)
 
             const combined = [
                 ...(mockData || []).map(m => ({ ...m, type: 'Mock' })),
@@ -107,12 +107,26 @@ export default function DashboardClient() {
             setRecentActivity(combined.slice(0, 5))
 
             // Calculate Streak
-            const activeDates = new Set(combined.map(a => new Date(a.created_at).toDateString()))
+            // Include last_sign_in_at to count today's login as activity
+            const activityDates = combined.map(a => new Date(a.created_at).toDateString())
+            if (user.last_sign_in_at) {
+                activityDates.push(new Date(user.last_sign_in_at).toDateString())
+            }
+
+            const activeDates = new Set(activityDates)
             let streak = 0
-            let today = new Date()
-            while (activeDates.has(today.toDateString())) {
-                streak++
-                today.setDate(today.getDate() - 1)
+            const today = new Date()
+            const yesterday = new Date(today)
+            yesterday.setDate(yesterday.getDate() - 1)
+
+            // Check streak starting from Today (if active) OR Yesterday
+            let checkDate = activeDates.has(today.toDateString()) ? today : yesterday
+
+            if (activeDates.has(checkDate.toDateString())) {
+                while (activeDates.has(checkDate.toDateString())) {
+                    streak++
+                    checkDate.setDate(checkDate.getDate() - 1)
+                }
             }
 
             setStats({ interviews: (interviewCount || 0) / 4, streak })
