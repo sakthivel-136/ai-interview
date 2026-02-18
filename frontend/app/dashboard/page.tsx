@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -25,15 +25,13 @@ interface Profile {
     }
 }
 
-export default function DashboardPage() {
+// ── Inner component that uses useSearchParams (must be inside Suspense) ───────
+function DashboardContent() {
     const { user, isLoading: authLoading } = useAuth()
     const [profile, setProfile] = useState<Profile | null>(null)
     const [loading, setLoading] = useState(true)
     const [recentActivity, setRecentActivity] = useState<any[]>([])
-    const [stats, setStats] = useState({
-        interviews: 0,
-        streak: 0
-    })
+    const [stats, setStats] = useState({ interviews: 0, streak: 0 })
     const router = useRouter()
     const searchParams = useSearchParams()
     const exitError = searchParams.get('error') === 'mock_exit'
@@ -86,21 +84,16 @@ export default function DashboardPage() {
 
             setRecentActivity(combined.slice(0, 5))
 
-            // Calculate Streak (Simple version: consecutive days with any activity)
+            // Calculate Streak
             const activeDates = new Set(combined.map(a => new Date(a.created_at).toDateString()))
             let streak = 0
             let today = new Date()
-
             while (activeDates.has(today.toDateString())) {
                 streak++
                 today.setDate(today.getDate() - 1)
             }
 
-            setStats({
-                interviews: (interviewCount || 0) / 4,
-                streak
-            })
-
+            setStats({ interviews: (interviewCount || 0) / 4, streak })
             setLoading(false)
         }
 
@@ -108,12 +101,14 @@ export default function DashboardPage() {
     }, [user, authLoading, router, supabase])
 
     if (loading || authLoading) {
-        return <div className="flex h-screen items-center justify-center bg-white text-[#000066]">
-            <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-blue-100 border-t-[#000066] rounded-full animate-spin"></div>
-                <p className="font-bold tracking-tight text-xs uppercase tracking-[0.2em] text-slate-400">Loading Intelligence...</p>
+        return (
+            <div className="flex h-screen items-center justify-center bg-white text-[#000066]">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-blue-100 border-t-[#000066] rounded-full animate-spin"></div>
+                    <p className="font-bold tracking-tight text-xs uppercase tracking-[0.2em] text-slate-400">Loading Intelligence...</p>
+                </div>
             </div>
-        </div>
+        )
     }
 
     return (
@@ -184,8 +179,7 @@ export default function DashboardPage() {
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <span className={`text-xs font-bold px-3 py-1.5 rounded-lg border ${act.passed || act.status === 'Pass' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-rose-50 text-rose-700 border-rose-100'
-                                                    }`}>
+                                                <span className={`text-xs font-bold px-3 py-1.5 rounded-lg border ${act.passed || act.status === 'Pass' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-rose-50 text-rose-700 border-rose-100'}`}>
                                                     {act.score !== undefined ? `${act.score}%` : act.status}
                                                 </span>
                                             </div>
@@ -208,15 +202,32 @@ export default function DashboardPage() {
     )
 }
 
+// ── Page export — wraps inner component in Suspense (required for useSearchParams) ──
+export default function DashboardPage() {
+    return (
+        <>
+            <Navbar />
+            <Suspense fallback={
+                <div className="flex h-screen items-center justify-center bg-white">
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="w-12 h-12 border-4 border-blue-100 border-t-[#000066] rounded-full animate-spin"></div>
+                        <p className="font-bold text-xs uppercase tracking-[0.2em] text-slate-400">Loading Intelligence...</p>
+                    </div>
+                </div>
+            }>
+                <DashboardContent />
+            </Suspense>
+        </>
+    )
+}
+
 function StatCard({ title, value, icon }: { title: string; value: string | number; icon: React.ReactNode }) {
     return (
         <div className="bg-white p-6 rounded-2xl border border-slate-100 flex items-center gap-5 hover:shadow-md transition-all group">
             <div className="p-4 bg-slate-50 rounded-2xl group-hover:bg-blue-50 transition-colors">{icon}</div>
             <div>
                 <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">{title}</h3>
-                <div className="text-2xl font-black mt-0.5 text-slate-900">
-                    {value}
-                </div>
+                <div className="text-2xl font-black mt-0.5 text-slate-900">{value}</div>
             </div>
         </div>
     )
