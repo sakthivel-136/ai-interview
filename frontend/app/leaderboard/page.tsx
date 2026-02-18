@@ -103,9 +103,10 @@ function LeaderboardTable({ entries, showRank = true }: { entries: LeaderboardEn
 
 export default function LeaderboardPage() {
     const { session } = useAuth()
-    const [allEntries, setAllEntries] = useState<LeaderboardEntry[]>(mockLeaderboard)
+    const [allEntries, setAllEntries] = useState<LeaderboardEntry[]>([])
     const [selectedDept, setSelectedDept] = useState<string>('All')
     const [deptDropdownOpen, setDeptDropdownOpen] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
@@ -115,9 +116,11 @@ export default function LeaderboardPage() {
                     headers: { 'Authorization': `Bearer ${session.access_token}` }
                 })
                 const data = await res.json()
-                if (data && data.length > 0) setAllEntries(data)
+                if (Array.isArray(data)) setAllEntries(data)
             } catch (e) {
                 console.error(e)
+            } finally {
+                setLoading(false)
             }
         }
         fetchLeaderboard()
@@ -159,56 +162,71 @@ export default function LeaderboardPage() {
                     </p>
                 </div>
 
-                {/* ── SECTION 1: College Top 20 ── */}
-                <div className="mb-16">
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center">
-                            <Trophy className="w-5 h-5 text-amber-500" />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">College Top 20</h2>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Overall best performers across all departments</p>
-                        </div>
+                {loading ? (
+                    <div className="flex flex-col items-center justify-center py-20">
+                        <div className="w-12 h-12 border-4 border-blue-100 border-t-[#000066] rounded-full animate-spin mb-4"></div>
+                        <p className="text-slate-400 font-bold text-xs uppercase tracking-widest animate-pulse">Calculating Ranks...</p>
                     </div>
-
-                    {/* Podium for top 3 */}
-                    <div className="grid grid-cols-3 gap-4 mb-8">
-                        {/* 2nd place */}
-                        <div className="bg-white rounded-[2rem] border border-slate-100 p-6 flex flex-col items-center text-center shadow-lg shadow-blue-900/5 mt-8">
-                            <div className="w-14 h-14 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center mb-3">
-                                <User className="w-7 h-7 text-slate-400" />
-                            </div>
-                            <div className="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center font-black text-slate-500 text-lg mb-2">2</div>
-                            <p className="font-black text-slate-900 uppercase tracking-tight text-sm">{collegeTop20[1]?.full_name}</p>
-                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{collegeTop20[1]?.department}</p>
-                            <p className="text-2xl font-black text-slate-600 mt-3">{collegeTop20[1]?.total_score.toFixed(1)}<span className="text-xs opacity-40">%</span></p>
-                        </div>
-                        {/* 1st place */}
-                        <div className="bg-gradient-to-b from-amber-50 to-white rounded-[2rem] border-2 border-amber-200 p-6 flex flex-col items-center text-center shadow-xl shadow-amber-900/10 -mt-4">
-                            <div className="w-16 h-16 rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center mb-3">
-                                <User className="w-8 h-8 text-amber-500" />
-                            </div>
-                            <Crown className="w-6 h-6 text-amber-500 mb-2" />
-                            <p className="font-black text-slate-900 uppercase tracking-tight">{collegeTop20[0]?.full_name}</p>
-                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{collegeTop20[0]?.department}</p>
-                            <p className="text-3xl font-black text-[#000066] mt-3">{collegeTop20[0]?.total_score.toFixed(1)}<span className="text-sm opacity-40">%</span></p>
-                            <span className="mt-3 px-3 py-1 bg-amber-100 text-amber-700 text-[9px] font-black uppercase tracking-widest rounded-full border border-amber-200">🏆 College Topper</span>
-                        </div>
-                        {/* 3rd place */}
-                        <div className="bg-white rounded-[2rem] border border-slate-100 p-6 flex flex-col items-center text-center shadow-lg shadow-blue-900/5 mt-8">
-                            <div className="w-14 h-14 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center mb-3">
-                                <User className="w-7 h-7 text-slate-400" />
-                            </div>
-                            <div className="w-8 h-8 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center font-black text-orange-500 text-lg mb-2">3</div>
-                            <p className="font-black text-slate-900 uppercase tracking-tight text-sm">{collegeTop20[2]?.full_name}</p>
-                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{collegeTop20[2]?.department}</p>
-                            <p className="text-2xl font-black text-slate-600 mt-3">{collegeTop20[2]?.total_score.toFixed(1)}<span className="text-xs opacity-40">%</span></p>
-                        </div>
+                ) : allEntries.length === 0 ? (
+                    <div className="text-center py-20 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl shadow-blue-900/5">
+                        <Trophy className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                        <h3 className="text-xl font-black text-slate-900 mb-2">No Rankings Yet</h3>
+                        <p className="text-slate-500 max-w-md mx-auto">Be the first to complete the interview protocol to appear on the leaderboard.</p>
                     </div>
+                ) : (
+                    <>
+                        {/* ── SECTION 1: College Top 20 ── */}
+                        <div className="mb-16">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center">
+                                    <Trophy className="w-5 h-5 text-amber-500" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">College Top 20</h2>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Overall best performers across all departments</p>
+                                </div>
+                            </div>
 
-                    {/* Full top 20 table */}
-                    <LeaderboardTable entries={collegeTop20} showRank={true} />
-                </div>
+                            {/* Podium for top 3 */}
+                            <div className="grid grid-cols-3 gap-4 mb-8">
+                                {/* 2nd place */}
+                                <div className="bg-white rounded-[2rem] border border-slate-100 p-6 flex flex-col items-center text-center shadow-lg shadow-blue-900/5 mt-8">
+                                    <div className="w-14 h-14 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center mb-3">
+                                        <User className="w-7 h-7 text-slate-400" />
+                                    </div>
+                                    <div className="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center font-black text-slate-500 text-lg mb-2">2</div>
+                                    <p className="font-black text-slate-900 uppercase tracking-tight text-sm">{collegeTop20[1]?.full_name || 'N/A'}</p>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{collegeTop20[1]?.department || '-'}</p>
+                                    <p className="text-2xl font-black text-slate-600 mt-3">{collegeTop20[1]?.total_score.toFixed(1) || 0}<span className="text-xs opacity-40">%</span></p>
+                                </div>
+                                {/* 1st place */}
+                                <div className="bg-gradient-to-b from-amber-50 to-white rounded-[2rem] border-2 border-amber-200 p-6 flex flex-col items-center text-center shadow-xl shadow-amber-900/10 -mt-4">
+                                    <div className="w-16 h-16 rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center mb-3">
+                                        <User className="w-8 h-8 text-amber-500" />
+                                    </div>
+                                    <Crown className="w-6 h-6 text-amber-500 mb-2" />
+                                    <p className="font-black text-slate-900 uppercase tracking-tight">{collegeTop20[0]?.full_name || 'N/A'}</p>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{collegeTop20[0]?.department || '-'}</p>
+                                    <p className="text-3xl font-black text-[#000066] mt-3">{collegeTop20[0]?.total_score.toFixed(1) || 0}<span className="text-sm opacity-40">%</span></p>
+                                    <span className="mt-3 px-3 py-1 bg-amber-100 text-amber-700 text-[9px] font-black uppercase tracking-widest rounded-full border border-amber-200">🏆 College Topper</span>
+                                </div>
+                                {/* 3rd place */}
+                                <div className="bg-white rounded-[2rem] border border-slate-100 p-6 flex flex-col items-center text-center shadow-lg shadow-blue-900/5 mt-8">
+                                    <div className="w-14 h-14 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center mb-3">
+                                        <User className="w-7 h-7 text-slate-400" />
+                                    </div>
+                                    <div className="w-8 h-8 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center font-black text-orange-500 text-lg mb-2">3</div>
+                                    <p className="font-black text-slate-900 uppercase tracking-tight text-sm">{collegeTop20[2]?.full_name || 'N/A'}</p>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{collegeTop20[2]?.department || '-'}</p>
+                                    <p className="text-2xl font-black text-slate-600 mt-3">{collegeTop20[2]?.total_score.toFixed(1) || 0}<span className="text-xs opacity-40">%</span></p>
+                                </div>
+                            </div>
+
+                            {/* Full top 20 table */}
+                            <LeaderboardTable entries={collegeTop20} showRank={true} />
+                        </div>
+                    </>
+                )}
 
                 {/* ── SECTION 2: Department Leaderboard ── */}
                 <div>
@@ -239,8 +257,8 @@ export default function LeaderboardPage() {
                                             key={dept}
                                             onClick={() => { setSelectedDept(dept); setDeptDropdownOpen(false) }}
                                             className={`w-full text-left px-5 py-3 text-[11px] font-black uppercase tracking-widest transition-all ${selectedDept === dept
-                                                    ? 'bg-[#000066] text-white'
-                                                    : 'text-slate-600 hover:bg-slate-50'
+                                                ? 'bg-[#000066] text-white'
+                                                : 'text-slate-600 hover:bg-slate-50'
                                                 }`}
                                         >
                                             {dept === 'All' ? '— All Departments —' : dept}
