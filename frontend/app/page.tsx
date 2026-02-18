@@ -64,7 +64,7 @@ export default function Home() {
           </h1>
 
           <p className="max-w-2xl mx-auto text-xl text-slate-500 mb-12 font-bold uppercase tracking-tight leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000">
-            The world's most advanced AI-driven interview intelligence platform. Built for elite candidates.
+            The world's most advanced neural interview intelligence platform. Built for elite candidates.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-in fade-in slide-in-from-bottom-12 duration-1000">
@@ -102,7 +102,7 @@ export default function Home() {
             />
             <FeatureCard
               title="Neural Mocking"
-              desc="Advanced behavioral analysis powered by Gemini 2.0 architecture."
+              desc="Advanced behavioral analysis powered by proprietary neural architecture."
               icon={<Globe className="w-8 h-8" />}
             />
             <FeatureCard
