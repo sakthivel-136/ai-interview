@@ -22,7 +22,8 @@ export default function Navbar() {
     // Hide navbar entirely on public landing page, login, and register pages.
     // The landing page has its own specialized header.
     const isPublicPage = ['/', '/login', '/register'].includes(pathname)
-    if (isPublicPage) return null
+    const isMockAssessment = pathname.startsWith('/mock/')
+    if (isPublicPage || isMockAssessment) return null
 
     if (!user) return null
 
