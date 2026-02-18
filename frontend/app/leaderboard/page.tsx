@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import Navbar from '@/components/Navbar'
 import { useAuth } from '@/context/AuthContext'
 import { Trophy, Award, Crown, Medal, User, ChevronDown } from 'lucide-react'
-import { mockLeaderboard, DEPARTMENTS } from '@/data/leaderboard'
+import { DEPARTMENTS } from '@/data/leaderboard'
 
 interface LeaderboardEntry {
     rank: number
