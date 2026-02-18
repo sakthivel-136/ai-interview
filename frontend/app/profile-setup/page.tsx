@@ -108,40 +108,56 @@ export default function ProfileSetupPage() {
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Division</label>
-                                    <select
-                                        id="department"
-                                        name="department"
-                                        required
-                                        className="block w-full rounded-2xl border-slate-100 bg-slate-50 py-4 text-slate-900 font-black text-[10px] uppercase tracking-widest focus:ring-4 focus:ring-blue-50 focus:border-[#000066] transition-all appearance-none text-center"
-                                        value={department}
-                                        onChange={(e) => setDepartment(e.target.value)}
-                                    >
-                                        <option value="" disabled>Select</option>
-                                        <option value="CSE">CSE</option>
-                                        <option value="ECE">ECE</option>
-                                        <option value="EEE">EEE</option>
-                                        <option value="IT">IT</option>
-                                        <option value="Mechanical">Mechanical</option>
-                                        <option value="Civil">Civil</option>
-                                    </select>
+                                <div className="relative">
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Department</label>
+                                    <div className="relative">
+                                        <select
+                                            id="department"
+                                            name="department"
+                                            required
+                                            className="block w-full rounded-2xl border-slate-100 bg-slate-50 py-4 pl-4 pr-10 text-slate-900 font-black text-[10px] uppercase tracking-widest focus:ring-4 focus:ring-blue-50 focus:border-[#000066] transition-all appearance-none cursor-pointer"
+                                            value={department}
+                                            onChange={(e) => setDepartment(e.target.value)}
+                                        >
+                                            <option value="" disabled>Select Branch</option>
+                                            <option value="CSE">CSE</option>
+                                            <option value="ECE">ECE</option>
+                                            <option value="EEE">EEE</option>
+                                            <option value="IT">IT</option>
+                                            <option value="Mechanical">Mechanical</option>
+                                            <option value="Civil">Civil</option>
+                                            <option value="AIDS">AI & DS</option>
+                                            <option value="AIML">AI & ML</option>
+                                        </select>
+                                        <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                                            <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Timeline</label>
-                                    <select
-                                        id="year"
-                                        name="year"
-                                        required
-                                        className="block w-full rounded-2xl border-slate-100 bg-slate-50 py-4 text-slate-900 font-black text-[10px] uppercase tracking-widest focus:ring-4 focus:ring-blue-50 focus:border-[#000066] transition-all appearance-none text-center"
-                                        value={year}
-                                        onChange={(e) => setYear(e.target.value)}
-                                    >
-                                        <option value="1">Year 01</option>
-                                        <option value="2">Year 02</option>
-                                        <option value="3">Year 03</option>
-                                        <option value="4">Year 04</option>
-                                    </select>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Academic Year</label>
+                                    <div className="relative">
+                                        <select
+                                            id="year"
+                                            name="year"
+                                            required
+                                            className="block w-full rounded-2xl border-slate-100 bg-slate-50 py-4 pl-4 pr-10 text-slate-900 font-black text-[10px] uppercase tracking-widest focus:ring-4 focus:ring-blue-50 focus:border-[#000066] transition-all appearance-none cursor-pointer"
+                                            value={year}
+                                            onChange={(e) => setYear(e.target.value)}
+                                        >
+                                            <option value="1">1st Year</option>
+                                            <option value="2">2nd Year</option>
+                                            <option value="3">3rd Year</option>
+                                            <option value="4">4th Year</option>
+                                        </select>
+                                        <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                                            <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
