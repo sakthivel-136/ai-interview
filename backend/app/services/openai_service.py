@@ -51,18 +51,23 @@ def get_gemini_response(prompt: str, json_mode: bool = True, model_override: Opt
     return get_mistral_response(prompt, json_mode, model_override)
 
 def evaluate_hr_answer(question: str, answer: str):
-    prompt = f"""
-    You are an expert HR interviewer for VANTAGE. Evaluate the following candidate answer.
+    prompt = f\"\"\"
+    You are an expert HR interviewer. Evaluate this answer RIGOROUSLY.
     
     Question: "{question}"
     Candidate Answer: "{answer}"
     
+    Criteria:
+    1. Did they answer the SPECIFIC question? (Penalize generic/guarded answers).
+    2. Is the answer relevant? (If irrelevant, score < 30).
+    3. Is there depth? (If one-liner without substance, score < 50).
+    
     Return a valid JSON object with:
-    - "score": integer (0-100)
+    - "score": integer (0-100). Be strict. 70+ is passing.
     - "sentiment": string ("Positive", "Neutral", "Negative")
-    - "confidence": float (0.0 to 1.0, how confident the candidate sounds)
-    - "feedback": string (2-3 sentences of constructive feedback)
-    """
+    - "confidence": float (0.0 to 1.0)
+    - "feedback": string (Critique the answer directly. If generic, say so.)
+    \"\"\"
 
     content = get_mistral_response(prompt)
     if content:
@@ -71,26 +76,31 @@ def evaluate_hr_answer(question: str, answer: str):
         except Exception as e:
             print(f"DEBUG: JSON parse error in evaluate_hr_answer: {e}")
             
-    # Fallback Data
+    # Fallback Data - FAIL if error
     return {
-        "score": 75, 
+        "score": 40, 
         "sentiment": "Neutral", 
-        "confidence": 0.7,
-        "feedback": "Server is currently busy processing other requests. Please try again in a moment."
+        "confidence": 0.0,
+        "feedback": "AI Evaluation Service unavailable. Please check backend API/Keys."
     }
 
 def evaluate_technical_answer(question: str, answer: str):
-    prompt = f"""
-    You are a Senior Technical Interviewer for VANTAGE. Evaluate the following technical answer for accuracy and depth.
+    prompt = f\"\"\"
+    You are a Senior Technical Interviewer. Evaluate this answer for ACCURACY, DEPTH, and SPECIFICITY.
     
     Question: "{question}"
     Candidate Answer: "{answer}"
     
+    Criteria:
+    - Accuracy: Is the technical information correct?
+    - Depth: Did they explain HOW/WHY, or just what?
+    - Relevance: Did they answer the specific question?
+    
     Return a valid JSON object with:
-    - "score": integer (0-100)
+    - "score": integer (0-100). Be strict. 70+ is passing.
     - "feedback": string (Detailed correction or praise)
     - "key_concepts": list of strings (Key concepts mentioned or missed)
-    """
+    \"\"\"
 
     content = get_mistral_response(prompt)
     if content:
@@ -99,11 +109,11 @@ def evaluate_technical_answer(question: str, answer: str):
         except Exception as e:
             print(f"DEBUG: JSON parse error in evaluate_technical_answer: {e}")
             
-    # Fallback Data
+    # Fallback Data - FAIL if error
     return {
-        "score": 60, 
-        "feedback": "Technical evaluation service is currently under high load. Please retry your submission.", 
-        "key_concepts": ["Architecture", "Precision", "Optimization"]
+        "score": 40, 
+        "feedback": "Technical evaluation service unavailable. Please check backend API/Keys.", 
+        "key_concepts": ["Service Error"]
     }
 
 def generate_resume_technical_questions(resume_text: str) -> list:

@@ -1,10 +1,36 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
-import { ChevronRight, Shield, Award, Terminal, MessageSquare, BadgeCheck } from 'lucide-react'
+import { useAuth } from '@/context/AuthContext'
+import { ChevronRight, Shield, Award, Terminal, MessageSquare, BadgeCheck, AlertCircle } from 'lucide-react'
 
 export default function MockIntroPage() {
+    const { session } = useAuth()
+    const [status, setStatus] = useState<{ blocked: boolean, count: number, has_resume: boolean } | null>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const checkStatus = async () => {
+            if (!session?.access_token) return
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/mock/check-block`, {
+                    headers: { 'Authorization': `Bearer ${session.access_token}` }
+                })
+                if (res.ok) {
+                    const data = await res.json()
+                    setStatus(data)
+                }
+            } catch (e) {
+                console.error("Failed to check status", e)
+            } finally {
+                setLoading(false)
+            }
+        }
+        checkStatus()
+    }, [session])
+
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
             <Navbar />
@@ -53,12 +79,34 @@ export default function MockIntroPage() {
                     />
                 </div>
 
-                <Link href="/mock/aptitude">
-                    <button className="bg-[#000066] hover:bg-blue-900 text-white font-black py-5 px-16 rounded-full text-xs uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/20 transition-all flex items-center gap-3 mx-auto group">
-                        Initialize Phase 01: Aptitude
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                </Link>
+                {loading ? (
+                    <div className="flex justify-center items-center py-5">
+                        <span className="text-slate-400 font-bold text-xs uppercase tracking-widest animate-pulse">Initializing Protocols...</span>
+                    </div>
+                ) : status?.blocked ? (
+                    <div className="bg-red-50 border border-red-100 text-red-800 px-6 py-4 rounded-xl inline-block">
+                        <div className="font-bold uppercase text-xs tracking-wider mb-1">Access Denied</div>
+                        <div className="text-sm">Daily attempt limit reached ({status.count}/5). Resets tomorrow.</div>
+                    </div>
+                ) : !status?.has_resume ? (
+                    <div className="bg-amber-50 border border-amber-100 text-amber-900 px-8 py-6 rounded-2xl inline-flex flex-col items-center">
+                        <AlertCircle className="w-8 h-8 mb-3 text-amber-600" />
+                        <div className="font-black uppercase text-xs tracking-widest mb-2">Resume Required</div>
+                        <div className="text-sm mb-4 max-w-md">System protocols require a resume for personalized technical question generation. Upload to proceed.</div>
+                        <Link href="/dashboard">
+                            <button className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-full text-xs uppercase tracking-wider transition-colors">
+                                Upload Resume in Dashboard
+                            </button>
+                        </Link>
+                    </div>
+                ) : (
+                    <Link href="/mock/aptitude">
+                        <button className="bg-[#000066] hover:bg-blue-900 text-white font-black py-5 px-16 rounded-full text-xs uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/20 transition-all flex items-center gap-3 mx-auto group">
+                            Initialize Phase 01: Aptitude
+                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                    </Link>
+                )}
             </div>
         </div>
     )

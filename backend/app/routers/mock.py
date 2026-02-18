@@ -358,10 +358,16 @@ def submit_coding_round(submission: dict = Body(...), user = Depends(get_current
 @router.get("/check-block")
 def check_mock_block(user = Depends(get_current_user)):
     supabase = get_supabase_client()
+    
+    # Check Profile for block status
     res = supabase.table("profiles").select("mock_exit_count, last_exit_date").eq("id", user.user.id).single().execute()
     
+    # Check Resume Existence - REQUIRED for Mock Interview
+    resume_res = supabase.table("resume_analysis").select("id").eq("user_id", user.user.id).limit(1).execute()
+    has_resume = bool(resume_res.data and len(resume_res.data) > 0)
+
     if not res.data:
-        return {"blocked": False, "count": 0}
+        return {"blocked": False, "count": 0, "has_resume": has_resume}
         
     exit_count = res.data.get("mock_exit_count", 0)
     last_date = res.data.get("last_exit_date")
@@ -370,9 +376,9 @@ def check_mock_block(user = Depends(get_current_user)):
     if last_date != today:
         # Reset count for a new day
         supabase.table("profiles").update({"mock_exit_count": 0, "last_exit_date": today}).eq("id", user.user.id).execute()
-        return {"blocked": False, "count": 0}
+        return {"blocked": False, "count": 0, "has_resume": has_resume}
         
-    return {"blocked": exit_count >= 5, "count": exit_count}
+    return {"blocked": exit_count >= 5, "count": exit_count, "has_resume": has_resume}
 
 @router.post("/exit-session")
 def report_exit(user = Depends(get_current_user)):
