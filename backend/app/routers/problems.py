@@ -28,25 +28,42 @@ class EvaluationResult(BaseModel):
     output: str
 
 def execute_python_code(code: str) -> str:
-    import sys
-    import io
-    import contextlib
-    import traceback
+    import subprocess
+    import tempfile
+    import os
 
-    output_buffer = io.StringIO()
+    tmp_path = None
     try:
-        # Create a restricted environment (optional but recommended)
-        # For now allowing standard builtins for flexibility
-        local_scope = {}
+        # Create a temporary file for the code
+        with tempfile.NamedTemporaryFile(suffix=".py", delete=False) as tmp:
+            tmp.write(code.encode('utf-8'))
+            tmp_path = tmp.name
+
+        # Run the code in a subprocess with a timeout (Sandbox simulation)
+        # We use a 5-second timeout to prevent infinite loops
+        result = subprocess.run(
+            ["python3", tmp_path],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
         
-        with contextlib.redirect_stdout(output_buffer):
-            with contextlib.redirect_stderr(output_buffer):
-                exec(code, {"__builtins__": __builtins__}, local_scope)
-    except Exception:
-        # Capture the full traceback for the user to debug
-        return traceback.format_exc()
+        output = result.stdout
+        if result.stderr:
+            output += f"\nError:\n{result.stderr}"
+            
+        return output if output else "(No output)"
+
+    except subprocess.TimeoutExpired:
+        return "Error: Execution timed out (exceeded 5 seconds). Possible infinite loop."
+    except Exception as e:
+        return f"Error during execution: {str(e)}"
+    finally:
+        # Clean up the temporary file
+        if tmp_path and os.path.exists(tmp_path):
+            os.remove(tmp_path)
     
-    return output_buffer.getvalue()
+    return "Error: Unknown execution failure." # Final fallback
 
 @router.get("/", response_model=List[ProblemSchema])
 def get_problems(user = Depends(get_current_user)):

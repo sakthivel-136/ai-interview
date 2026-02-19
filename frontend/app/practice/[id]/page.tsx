@@ -4,9 +4,14 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
 import { useAuth } from '@/context/AuthContext'
 import { Code2, Terminal, Play, Shield, ArrowLeft, CheckCircle2, XCircle, Clock, AlertTriangle, Ban, EyeOff } from 'lucide-react'
 import { codingProblems } from '@/data/coding'
+
+const Editor = dynamic(() => import('@monaco-editor/react'), { ssr: false })
+
 
 interface Problem {
     id: string
@@ -307,15 +312,31 @@ export default function ProblemDetailPage() {
                                     <div className="w-3 h-3 rounded-full bg-green-500/40" />
                                 </div>
                             </div>
-                            <textarea
-                                className="flex-1 w-full bg-transparent text-slate-300 p-6 font-mono text-sm resize-none focus:outline-none leading-relaxed"
-                                value={code}
-                                onChange={(e) => setCode(e.target.value)}
-                                spellCheck={false}
-                                disabled={hasPassed}
-                                placeholder="# Write your solution here..."
-                                style={{ minHeight: '300px' }}
-                            />
+                            <div className="flex-1 w-full bg-[#0a0e14] overflow-hidden rounded-b-[2rem]">
+                                <Editor
+                                    height="100%"
+                                    defaultLanguage="python"
+                                    theme="vs-dark"
+                                    value={code}
+                                    onChange={(value) => setCode(value || '')}
+                                    options={{
+                                        fontSize: 14,
+                                        minimap: { enabled: false },
+                                        scrollBeyondLastLine: false,
+                                        automaticLayout: true,
+                                        readOnly: hasPassed,
+                                        fontFamily: 'JetBrains Mono, Menlo, Monaco, Courier New, monospace',
+                                        lineNumbers: 'on',
+                                        renderLineHighlight: 'all',
+                                        tabSize: 4,
+                                        insertSpaces: true,
+                                        autoClosingQuotes: 'always',
+                                        autoClosingBrackets: 'always',
+                                        autoIndent: 'full',
+                                        wordWrap: 'on'
+                                    }}
+                                />
+                            </div>
                         </div>
 
                         {/* Output Console */}
