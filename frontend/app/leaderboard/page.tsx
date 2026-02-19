@@ -102,7 +102,7 @@ function LeaderboardTable({ entries, showRank = true }: { entries: LeaderboardEn
 }
 
 export default function LeaderboardPage() {
-    const { session } = useAuth()
+    const { session, isLoading: authLoading } = useAuth()
     const [allEntries, setAllEntries] = useState<LeaderboardEntry[]>([])
     const [selectedDept, setSelectedDept] = useState<string>('All')
     const [deptDropdownOpen, setDeptDropdownOpen] = useState(false)
@@ -110,7 +110,15 @@ export default function LeaderboardPage() {
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
-            if (!session?.access_token) return
+            // 1. Wait for Auth to finish initialization
+            if (authLoading) return
+
+            // 2. If no session after init, stop loading (user not logged in)
+            if (!session?.access_token) {
+                setLoading(false)
+                return
+            }
+
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/leaderboard`, {
                     headers: { 'Authorization': `Bearer ${session.access_token}` }
@@ -124,7 +132,7 @@ export default function LeaderboardPage() {
             }
         }
         fetchLeaderboard()
-    }, [session])
+    }, [session, authLoading])
 
     // College Top 20 (overall)
     const collegeTop20 = useMemo(() =>
