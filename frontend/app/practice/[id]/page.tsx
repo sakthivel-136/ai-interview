@@ -40,7 +40,7 @@ export default function ProblemDetailPage() {
     const [output, setOutput] = useState('')
     const [loading, setLoading] = useState(!problem)
     const [evaluating, setEvaluating] = useState(false)
-    const [result, setResult] = useState<{ status: string, message: string } | null>(null)
+    const [result, setResult] = useState<{ status: string, message: string, output?: string } | null>(null)
     const [hasPassed, setHasPassed] = useState(false)
     const supabase = createClient()
     const [timeLeft, setTimeLeft] = useState(1800) // 30 minutes
@@ -74,7 +74,7 @@ export default function ProblemDetailPage() {
 
                         if (passData) {
                             setHasPassed(true);
-                            setResult({ status: 'Pass', message: 'MODULE ALREADY MASTERED. PROCEED TO NEXT CHALLENGE.' });
+                            setResult({ status: 'Pass', message: 'MODULE ALREADY MASTERED. PROCEED TO NEXT CHALLENGE.', output: '' });
                         }
                     }
                 }
@@ -129,7 +129,12 @@ export default function ProblemDetailPage() {
             }
 
             setResult(data)
-            setOutput(data.message)
+            // Ideally, we'd separate these, but for now let's put the execution output in the main 'output' display
+            // and the AI message in a separate area or appended.
+            // The user asked for "output to be shown and then only the comment".
+
+            // Set the raw execution output to the main display variable
+            setOutput(data.output || '(No output)')
 
             if (data.status === 'Pass') {
                 setHasPassed(true)
@@ -251,7 +256,7 @@ export default function ProblemDetailPage() {
                         <div className="flex justify-between items-center mb-4">
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#000066]" />
-                                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Output</h3>
+                                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Execution Output</h3>
                             </div>
                             <div className="flex items-center gap-3">
                                 {result && (
@@ -285,9 +290,29 @@ export default function ProblemDetailPage() {
                                 </button>
                             </div>
                         </div>
-                        <pre className="font-mono text-xs text-slate-500 overflow-y-auto font-medium whitespace-pre-wrap max-h-32">
-                            {output || '// Awaiting submission...'}
-                        </pre>
+
+                        {/* 1. Actual Code Output */}
+                        <div className="bg-slate-50 rounded-xl p-4 mb-4 border border-slate-100">
+                            <pre className="font-mono text-xs text-slate-600 overflow-y-auto font-medium whitespace-pre-wrap max-h-32">
+                                {output || '// Console output will appear here...'}
+                            </pre>
+                        </div>
+
+                        {/* 2. AI Feedback (Comment) */}
+                        {result?.message && (
+                            <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Feedback & Analysis</h3>
+                                </div>
+                                <div className={`p-4 rounded-xl border ${result.status === 'Pass' ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' : 'bg-rose-50/50 border-rose-100 text-rose-800'
+                                    }`}>
+                                    <p className="text-sm font-medium leading-relaxed">
+                                        {result.message}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

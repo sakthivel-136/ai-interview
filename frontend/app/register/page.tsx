@@ -23,9 +23,7 @@ export default function RegisterPage() {
             email,
             password,
             options: {
-                emailRedirectTo: window.location.origin.includes('localhost')
-                    ? 'https://ai-interview-blue-eight.vercel.app/auth/callback'
-                    : `${window.location.origin}/auth/callback`,
+                emailRedirectTo: `${window.location.origin}/auth/callback`,
             }
         })
 

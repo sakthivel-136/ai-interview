@@ -25,6 +25,28 @@ class EvaluationResult(BaseModel):
     score: int
     status: str
     message: str
+    output: str
+
+def execute_python_code(code: str) -> str:
+    import sys
+    import io
+    import contextlib
+    import traceback
+
+    output_buffer = io.StringIO()
+    try:
+        # Create a restricted environment (optional but recommended)
+        # For now allowing standard builtins for flexibility
+        local_scope = {}
+        
+        with contextlib.redirect_stdout(output_buffer):
+            with contextlib.redirect_stderr(output_buffer):
+                exec(code, {"__builtins__": __builtins__}, local_scope)
+    except Exception:
+        # Capture the full traceback for the user to debug
+        return traceback.format_exc()
+    
+    return output_buffer.getvalue()
 
 @router.get("/", response_model=List[ProblemSchema])
 def get_problems(user = Depends(get_current_user)):
@@ -76,16 +98,22 @@ def submit_solution(submission: SubmissionSchema, user = Depends(get_current_use
         print(f"DEBUG: Non-UUID problem_id '{submission.problem_id}' — skipping DB fetch")
 
     try:
-        # 2. Evaluate Code with Mistral (always runs)
+        # 2. Execute Code (Real Execution)
+        start_exec = time.time()
+        execution_output = execute_python_code(submission.code)
+        print(f"DEBUG: [{time.time() - start_exec:.2f}s] Code Execution done")
+
+        # 3. Evaluate Code with Mistral (AI Evaluation)
         start_ai = time.time()
-        evaluation = evaluate_code(title, description, submission.code)
+        # Append the execution output to the prompt so AI knows what happened
+        evaluation = evaluate_code(title, description, submission.code + f"\n\n# Execution Output:\n{execution_output}")
         print(f"DEBUG: [{time.time() - start_ai:.2f}s] AI Evaluation done")
 
         score = evaluation.get("score", 0)
         status = evaluation.get("status", "Fail")
         message = evaluation.get("message", "Evaluation failed.")
 
-        # 3. Save Submission to DB only if it's a real UUID
+        # 4. Save Submission to DB only if it's a real UUID
         if is_real_uuid:
             try:
                 supabase = get_supabase_client()
@@ -104,7 +132,12 @@ def submit_solution(submission: SubmissionSchema, user = Depends(get_current_use
             print(f"DEBUG: Non-UUID problem_id — skipping DB save")
 
         print(f"DEBUG: TOTAL TIME: {time.time() - start_total:.2f}s")
-        return {"score": score, "status": status, "message": message}
+        return {
+            "score": score, 
+            "status": status, 
+            "message": message,
+            "output": execution_output
+        }
     except Exception as e:
         print(f"DEBUG: CRITICAL ERROR: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}")
