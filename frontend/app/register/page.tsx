@@ -107,6 +107,10 @@ export default function RegisterPage() {
                             )}
                         </button>
 
+                        <p className="mt-4 text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                            Check in the junk/spam too for confirmation
+                        </p>
+
                         <div className="text-center">
                             <Link href="/login" className="text-[10px] font-black text-slate-400 hover:text-[#000066] uppercase tracking-widest transition-colors">
                                 Already Registered? Authorize Access
