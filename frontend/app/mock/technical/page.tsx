@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
-import { Terminal, Award, ChevronRight, CheckCircle2, XCircle, Cpu, AlertCircle, Clock } from 'lucide-react'
+import { Terminal, Award, ChevronRight, CheckCircle2, XCircle, Cpu, AlertCircle, Clock, Ban, EyeOff, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
 import { useFullScreen } from '@/hooks/useFullScreen'
 
@@ -34,6 +34,10 @@ export default function TechnicalInterviewPage() {
     const [scores, setScores] = useState<number[]>([])
     const [allDone, setAllDone] = useState(false)
 
+    // Proctoring State
+    const [violationCount, setViolationCount] = useState(0)
+    const [isTerminated, setIsTerminated] = useState(false)
+
     const currentQuestion = questions[currentIdx]
     const isLastQuestion = currentIdx === TOTAL_QUESTIONS - 1
 
@@ -60,7 +64,23 @@ export default function TechnicalInterviewPage() {
     }, [session])
 
     useEffect(() => {
-        if (!started) return
+        const handleVisibilityChange = () => {
+            if (document.hidden && started && !allDone && !isTerminated) {
+                setViolationCount(prev => {
+                    const newCount = prev + 1
+                    if (newCount >= 3) {
+                        setIsTerminated(true)
+                    }
+                    return newCount
+                })
+            }
+        }
+        document.addEventListener("visibilitychange", handleVisibilityChange)
+        return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
+    }, [started, allDone, isTerminated])
+
+    useEffect(() => {
+        if (!started || isTerminated) return
         if (timeLeft <= 0) {
             alert('Session Expired: Time limit reached. Redirecting to dashboard.')
             router.push('/dashboard')
@@ -68,7 +88,7 @@ export default function TechnicalInterviewPage() {
         }
         const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000)
         return () => clearInterval(timer)
-    }, [timeLeft, started, router])
+    }, [timeLeft, started, router, isTerminated])
 
     const formatTime = (seconds: number) => {
         const m = Math.floor(seconds / 60)
@@ -77,7 +97,7 @@ export default function TechnicalInterviewPage() {
     }
 
     const handleSubmit = async () => {
-        if (!answer.trim() || submitting || !currentQuestion) return
+        if (!answer.trim() || submitting || !currentQuestion || isTerminated) return
         setSubmitting(true)
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/mock/technical/submit`, {
@@ -127,6 +147,43 @@ export default function TechnicalInterviewPage() {
                 <Link href="/dashboard" className="px-12 py-4 bg-[#000066] text-white font-black rounded-2xl shadow-xl hover:bg-blue-900 transition-all">
                     Return to Dashboard
                 </Link>
+            </div>
+        )
+    }
+
+    if (isTerminated) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-12 text-center">
+                <div className="max-w-4xl w-full animate-in zoom-in-95 duration-300 flex flex-col items-center">
+                    <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-8 border-4 border-red-50">
+                        <Ban className="w-12 h-12 text-red-600" />
+                    </div>
+                    <h1 className="text-4xl font-black text-slate-900 uppercase tracking-tighter mb-4">
+                        Session Terminated
+                    </h1>
+                    <div className="bg-red-50 border border-red-100 rounded-2xl p-6 mb-8 max-w-lg">
+                        <div className="flex items-center gap-3 mb-2 justify-center text-red-700">
+                            <EyeOff className="w-5 h-5" />
+                            <span className="font-black uppercase tracking-widest text-xs">Security Violation</span>
+                        </div>
+                        <p className="text-red-600 font-medium">
+                            Multiple background tab switches detected. This session has been flagged and terminated to maintain integrity.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col gap-2 mb-10 text-slate-400">
+                        <span className="text-[10px] font-black uppercase tracking-widest">Final Score</span>
+                        <span className="text-6xl font-black text-slate-900">0</span>
+                    </div>
+
+                    <Link
+                        href="/dashboard"
+                        className="px-8 py-4 bg-[#000066] text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-900 transition-all shadow-xl shadow-blue-900/10 flex items-center gap-2"
+                    >
+                        <ChevronRight className="w-4 h-4 rotate-180" />
+                        Return to Dashboard
+                    </Link>
+                </div>
             </div>
         )
     }
@@ -301,7 +358,17 @@ export default function TechnicalInterviewPage() {
                     </div>
                 </div>
             )}
-
+            {/* Warning Banner */}
+            {violationCount > 0 && (
+                <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+                    <div className="bg-amber-100 text-amber-800 border border-amber-200 px-6 py-2 rounded-full shadow-lg flex items-center gap-2 animate-bounce">
+                        <AlertTriangle className="w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">
+                            Warning: Tab Switching Detected ({violationCount}/3)
+                        </span>
+                    </div>
+                </div>
+            )}
             <div className="flex-1 max-w-5xl mx-auto w-full p-8 flex flex-col gap-8">
                 <header className="flex items-center justify-between">
                     <div>
@@ -313,12 +380,12 @@ export default function TechnicalInterviewPage() {
                         <div className="flex items-center gap-2">
                             {Array.from({ length: TOTAL_QUESTIONS }).map((_, i) => (
                                 <div key={i} className={`w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-black border-2 transition-all ${i < currentIdx
-                                        ? scores[i] >= PASS_THRESHOLD
-                                            ? 'bg-emerald-500 border-emerald-500 text-white'
-                                            : 'bg-red-400 border-red-400 text-white'
-                                        : i === currentIdx
-                                            ? 'bg-[#000066] border-[#000066] text-white'
-                                            : 'bg-white border-slate-200 text-slate-400'
+                                    ? scores[i] >= PASS_THRESHOLD
+                                        ? 'bg-emerald-500 border-emerald-500 text-white'
+                                        : 'bg-red-400 border-red-400 text-white'
+                                    : i === currentIdx
+                                        ? 'bg-[#000066] border-[#000066] text-white'
+                                        : 'bg-white border-slate-200 text-slate-400'
                                     }`}>
                                     {i < currentIdx ? (scores[i] >= PASS_THRESHOLD ? '✓' : '✗') : i + 1}
                                 </div>

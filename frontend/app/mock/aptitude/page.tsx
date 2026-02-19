@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
-import { Clock, CheckCircle2, AlertCircle, ChevronRight, Maximize2 } from 'lucide-react'
+import { Clock, CheckCircle2, AlertCircle, ChevronRight, Maximize2, Ban, EyeOff, AlertTriangle } from 'lucide-react'
 import { aptitudeQuestions } from '@/data/aptitude'
 import Link from 'next/link'
 import { useFullScreen } from '@/hooks/useFullScreen'
@@ -27,15 +27,36 @@ export default function AptitudePage() {
     const [showResult, setShowResult] = useState<{ score: number, passed: boolean } | null>(null)
     const { isFullScreen, isEntering, enterFullScreen, exitGracefully, blocked, loading: fsLoading, breach, reportExit } = useFullScreen()
 
+    // Proctoring State
+    const [violationCount, setViolationCount] = useState(0)
+    const [isTerminated, setIsTerminated] = useState(false)
+
     useEffect(() => {
         const shuffled = [...aptitudeQuestions].sort(() => 0.5 - Math.random())
         setQuestions(shuffled.slice(0, 10) as Question[])
         setLoading(false)
     }, [])
 
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden && started && !showResult && !isTerminated) {
+                setViolationCount(prev => {
+                    const newCount = prev + 1
+                    if (newCount >= 3) {
+                        setIsTerminated(true)
+                    }
+                    return newCount
+                })
+            }
+        }
+        document.addEventListener("visibilitychange", handleVisibilityChange)
+        return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
+    }, [started, showResult, isTerminated])
+
+
     // Core submit logic — forceSubmit=true skips the "all answered" check (used on timeout)
     const handleSubmitInternal = useCallback(async (forceSubmit = false) => {
-        if (submitting || showResult) return
+        if (submitting || showResult || isTerminated) return
         if (!forceSubmit && Object.keys(answers).length < questions.length) {
             alert('Please answer all questions before submitting.')
             return
@@ -71,18 +92,18 @@ export default function AptitudePage() {
 
         setShowResult({ score: percentage, passed: isPassed })
         setSubmitting(false)
-    }, [submitting, answers, questions, exitGracefully, session?.access_token, showResult])
+    }, [submitting, answers, questions, exitGracefully, session?.access_token, showResult, isTerminated])
 
     // Timer — only runs after session starts
     useEffect(() => {
-        if (!started || showResult) return
+        if (!started || showResult || isTerminated) return
         if (timeLeft <= 0) {
             handleSubmitInternal(true)
             return
         }
         const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000)
         return () => clearInterval(timer)
-    }, [timeLeft, started, handleSubmitInternal, showResult])
+    }, [timeLeft, started, handleSubmitInternal, showResult, isTerminated])
 
     const handleSelect = (qId: string, option: string) => {
         setAnswers(prev => ({ ...prev, [qId]: option }))
@@ -115,6 +136,43 @@ export default function AptitudePage() {
                 <Link href="/dashboard" className="px-12 py-4 bg-[#000066] text-white font-black rounded-2xl shadow-xl hover:bg-blue-900 transition-all">
                     Return to Dashboard
                 </Link>
+            </div>
+        )
+    }
+
+    if (isTerminated) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-12 text-center">
+                <div className="max-w-4xl w-full animate-in zoom-in-95 duration-300 flex flex-col items-center">
+                    <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-8 border-4 border-red-50">
+                        <Ban className="w-12 h-12 text-red-600" />
+                    </div>
+                    <h1 className="text-4xl font-black text-slate-900 uppercase tracking-tighter mb-4">
+                        Session Terminated
+                    </h1>
+                    <div className="bg-red-50 border border-red-100 rounded-2xl p-6 mb-8 max-w-lg">
+                        <div className="flex items-center gap-3 mb-2 justify-center text-red-700">
+                            <EyeOff className="w-5 h-5" />
+                            <span className="font-black uppercase tracking-widest text-xs">Security Violation</span>
+                        </div>
+                        <p className="text-red-600 font-medium">
+                            Multiple background tab switches detected. This session has been flagged and terminated to maintain integrity.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col gap-2 mb-10 text-slate-400">
+                        <span className="text-[10px] font-black uppercase tracking-widest">Final Score</span>
+                        <span className="text-6xl font-black text-slate-900">0</span>
+                    </div>
+
+                    <Link
+                        href="/dashboard"
+                        className="px-8 py-4 bg-[#000066] text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-900 transition-all shadow-xl shadow-blue-900/10 flex items-center gap-2"
+                    >
+                        <ChevronRight className="w-4 h-4 rotate-180" />
+                        Return to Dashboard
+                    </Link>
+                </div>
             </div>
         )
     }
@@ -191,6 +249,19 @@ export default function AptitudePage() {
                     </div>
                 </div>
             )}
+
+            {/* Warning Banner */}
+            {violationCount > 0 && (
+                <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+                    <div className="bg-amber-100 text-amber-800 border border-amber-200 px-6 py-2 rounded-full shadow-lg flex items-center gap-2 animate-bounce">
+                        <AlertTriangle className="w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">
+                            Warning: Tab Switching Detected ({violationCount}/3)
+                        </span>
+                    </div>
+                </div>
+            )}
+
             {/* Header / Timer */}
             <div className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 z-50">
                 <div className="max-w-7xl mx-auto px-8 h-20 flex justify-between items-center">
